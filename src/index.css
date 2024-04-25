@@ -9,3 +9,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.ant-menu-item {
+  border-inline-end: 0 !important;
+}

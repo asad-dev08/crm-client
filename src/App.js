@@ -1,22 +1,26 @@
-import  {Button, Typography} from 'antd'
-import './App.css';
-import ThemeProvider from './components/theme/ThemeProvider';
-import Settings from './components/theme/settings/Settings';
-import toast, { Toaster } from 'react-hot-toast';
-
-const {Paragraph, Text} = Typography
+import { Button, Typography } from "antd";
+import "./App.css";
+import ThemeProvider from "./components/theme/ThemeProvider";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "./components/theme/global/GlobalLayout";
+import Dashboard from "./pages/dashboard/Dashboard";
+import ErrorPage from "./pages/error/ErrorPage";
 
 function App() {
-  const notify = () => toast.success('Here is your toast.', {duration:3000});
 
   return (
-   <ThemeProvider>
-    <Typography.Title level={5}>Hello CRM</Typography.Title>
-          <Button type='primary' onClick={notify}>Make me a toast</Button>
-
-    <Settings />
-    <Toaster />
-   </ThemeProvider>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="*" element={<ErrorPage />} />
+            
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

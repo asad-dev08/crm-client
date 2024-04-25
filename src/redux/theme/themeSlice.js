@@ -6,7 +6,14 @@ const themeSlice = createSlice({
   name: "theme",
   initialState: {
     currentTheme: {
-      colorPrimary: "#000000"
+      colorBgBase: "#ffffff",
+      colorPrimary: "#4f46e5",
+      colorInfo: "#4f46e5",
+      colorLink: "#ea580c",
+      colorTextBase: "#000000",
+      colorSuccess: "#16a34a",
+      colorWarning: "#ca8a04",
+      colorError: "#dc2626",
     },
   },
   reducers: {
