@@ -3,7 +3,7 @@ import React from 'react';
 
 import { MdChevronLeft, MdChevronRight, MdPerson } from "react-icons/md";
 
-const PageHeader = ({toggleSider, collapsed}) => {
+const PageHeader = ({toggleSider, collapsed, isMediumScreen, showDrawer}) => {
   const menu = (
     <Menu style={{width:'110px', textAlign:'left'}}>
       <Menu.Item>
@@ -24,7 +24,7 @@ const PageHeader = ({toggleSider, collapsed}) => {
   )
   return (
     <div className='flex items-center justify-between'>
-      <Button type="link" onClick={toggleSider} className="text-2xl">
+      <Button type="link" onClick={!isMediumScreen ? toggleSider : showDrawer} className="text-2xl">
               {React.createElement(collapsed ? MdChevronRight : MdChevronLeft)}
             </Button>
 

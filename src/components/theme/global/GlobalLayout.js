@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Layout, Space } from "antd";
+import { Card, Drawer, Layout, Space } from "antd";
 import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
@@ -7,133 +7,88 @@ import Settings from "../settings/Settings";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 import PageHeader from "./PageHeader";
-import { useMediaQuery } from 'react-responsive';
-
-
-const menuList = [
-  {
-    id: 1,
-    name: "Dashboard",
-    url: "/dashboard",
-    children: [],
-  },
-  {
-    id: 2,
-    name: "Role Management",
-    url: "",
-    children: [
-      {
-        id: 3,
-        name: "Role Groups",
-        url: "",
-        children: [
-          {
-            id: 5,
-            name: "Role Group List",
-            url: "/role-groups",
-            children: [],
-          },
-          {
-            id: 6,
-            name: "Create Role Groups",
-            url: "/role-group/new",
-            children: [],
-          },
-        ],
-      },
-      {
-        id: 4,
-        name: "Group Wise Menu Permission",
-        url: "",
-        children: [
-          {
-            id: 7,
-            name: "Menu Permission List",
-            url: "/group-menu-permissions",
-            children: [],
-          },
-          {
-            id: 8,
-            name: "Create Menu Permission",
-            url: "/group-menu-permission/new",
-            children: [],
-          },
-        ],
-      },
-      {
-        id: 9,
-        name: "Users",
-        url: "",
-        children: [
-          {
-            id: 10,
-            name: "Users List",
-            url: "/users",
-            children: [],
-          },
-          {
-            id: 11,
-            name: "Create User",
-            url: "/user/new",
-            children: [],
-          },
-        ],
-      },
-    ],
-  },
-];
+import { useMediaQuery } from "react-responsive";
+import { MdDashboard } from "react-icons/md";
 
 const { Header, Content, Footer, Sider } = Layout;
-
-function addKeyProperty(menuItem) {
-  // Check if the item has children
-  if (menuItem.children && menuItem.children.length > 0) {
-    // If it has children, set the key to 'sub' + id
-    menuItem.key = "sub" + menuItem.id;
-    // Recursively process each child
-    menuItem.children.forEach(addKeyProperty);
-  } else {
-    // If it doesn't have children, set the key to just the id
-    menuItem.key = menuItem.id;
-  }
-}
 
 const GlobalLayout = () => {
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-const isMediumScreen = useMediaQuery({ query: '(min-width: 768px)' });
-useEffect(() => {
-  setCollapsed(true)
-}, [isMediumScreen])
+  const isMediumScreen = useMediaQuery({ maxWidth: 991 });
+
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState("left");
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    setCollapsed(isMediumScreen);
+  }, [isMediumScreen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCollapsed(isMediumScreen);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMediumScreen]);
 
   const toggleSider = () => {
     setCollapsed(!collapsed);
   };
 
-  menuList.forEach(addKeyProperty);
-  console.log(menuList);
   return (
-    <Layout style={{ minHeight: "100vh", borderRadius: 0, height: "100vh" }}>
-      <Sider
-        width={250}
-        collapsible
-        collapsed={collapsed}
-        collapsedWidth={0}
-        trigger={null}
-      >
-        <Sidebar
-          defaultOpenKeys={[]}
+    <Layout style={{ minHeight: "100vh", borderRadius: 0, height: "100%" }}>
+      {isMediumScreen ? (
+        <Drawer
+          style={{ width: 250, height: "calc(100vh)" }}
+          bodyStyle={{ padding: 0, overflowX: "hidden", overflowY: "auto" }}
+          headerStyle={{ padding: 5 }}
+          placement={placement}
+          width={250}
+          onClose={onClose}
+          open={open}
+        >
+          <Sidebar
+            defaultOpenKeys={[]}
+            collapsed={collapsed}
+            isMediumScreen={isMediumScreen}
+          />
+        </Drawer>
+      ) : (
+        <Sider
+          className="fixed bottom-0 left-0 top-0"
+          width={250}
+          collapsible
           collapsed={collapsed}
-          menuItems={menuList}
-        />
-      </Sider>
+          collapsedWidth={0}
+          trigger={null}
+        >
+          <Sidebar
+            defaultOpenKeys={[]}
+            collapsed={collapsed}
+            isMediumScreen={isMediumScreen}
+          />
+        </Sider>
+      )}
+
       <Layout style={{ padding: "10px" }}>
         <Space direction="vertical">
           <Card
             bodyStyle={{ padding: "12px 12px 12px 0px" }}
             style={{ padding: "0" }}
           >
-            <PageHeader toggleSider={toggleSider} collapsed={collapsed} />
+            <PageHeader
+              toggleSider={toggleSider}
+              collapsed={collapsed}
+              isMediumScreen={isMediumScreen}
+              showDrawer={showDrawer}
+            />
           </Card>
           <Card>
             <Outlet />
