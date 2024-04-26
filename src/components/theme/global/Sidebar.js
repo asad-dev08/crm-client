@@ -66,12 +66,12 @@ const menuItems = [
             url: "/users",
             children: [],
           },
-          {
-            id: 11,
-            name: "Create User",
-            url: "/user/new",
-            children: [],
-          },
+          // {
+          //   id: 11,
+          //   name: "Create User",
+          //   url: "/user/new",
+          //   children: [],
+          // },
         ],
       },
     ],
