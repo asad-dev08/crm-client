@@ -4,18 +4,25 @@ import UserListHeader from "./UserListHeader";
 import CreateUser from "../create-user/CreateUser";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUser, getUsersWithPagination } from "../../../redux/user/userSlice";
-import { Button, Dropdown, Menu } from "antd";
+import {
+  deleteUser,
+  getUser,
+  getUsersWithPagination,
+} from "../../../redux/user/userSlice";
+import { Button, Dropdown, Menu, Modal } from "antd";
 import { MdMoreVert } from "react-icons/md";
+import toast from "react-hot-toast";
 
 const UserList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const rowsPerPage = 10;
+  const rowsPerPage = 1;
   const [deleteStatus, setDeleteStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -31,14 +38,13 @@ const UserList = () => {
   const getMenu = (row) => (
     <Menu onClick={(e) => handleMenuClick(e, row)}>
       <Menu.Item key="edit">Edit</Menu.Item>
-      <Menu.Item key="delete">Delete</Menu.Item>
+      <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, row)}>
+        Delete
+      </Menu.Item>
       <Menu.Item key="view">View</Menu.Item>
     </Menu>
   );
   const handleMenuClick = async (e, row) => {
-    // Handle menu item click
-    console.log("Clicked option:", e.key);
-    console.log("Row data:", row);
     if (e.key === "edit") {
       const response = await dispatch(getUser(row.id));
       const data =
@@ -48,6 +54,25 @@ const UserList = () => {
       setIsAdd(false);
     }
   };
+
+  const showDeleteModal = (e, row) => {
+    setSelectedRow(row);
+    setDeleteModalVisible(true);
+  };
+  const handleDeleteModalOk = async () => {
+    // Perform delete action
+    const response = await dispatch(deleteUser(selectedRow.id));
+    if (response) {
+      toast.success("User deleted", { duration: 3000 });
+      setDeleteStatus(true); // Trigger data refetch
+      setDeleteModalVisible(false); // Close the modal
+    }
+  };
+
+  const handleDeleteModalCancel = () => {
+    setDeleteModalVisible(false); // Close the modal
+  };
+
   const columns = [
     { columnName: "username", columnShow: "Username" },
     { columnName: "email", columnShow: "Email" },
@@ -123,6 +148,15 @@ const UserList = () => {
           isAdd={isAdd}
         />
       )}
+      <Modal
+        title="Confirm Delete"
+        visible={deleteModalVisible}
+        onOk={handleDeleteModalOk}
+        onCancel={handleDeleteModalCancel}
+        maskClosable={false}
+      >
+        <p>Are you sure you want to delete this user?</p>
+      </Modal>
     </div>
   );
 };

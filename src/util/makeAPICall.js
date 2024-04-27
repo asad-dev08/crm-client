@@ -18,6 +18,8 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
       "/auth/verifyLogin",
       "/user",
       "/user/3",
+      "/user/8",
+      "/user/10",
       "/user-pagination",
     ];
     const isInvalid = util.invalidUser();

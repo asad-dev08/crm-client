@@ -11,7 +11,7 @@ import {
 import React from "react";
 import useForm from "../../../hooks/useForm";
 import { useDispatch } from "react-redux";
-import { saveUser } from "../../../redux/user/userSlice";
+import { saveUser, updateUser } from "../../../redux/user/userSlice";
 import toast from "react-hot-toast";
 
 const defaultForm = {
@@ -32,8 +32,6 @@ const defaultForm = {
 
 const CreateUser = ({ onClose, open, data, isAdd }) => {
   const dispatch = useDispatch();
-  console.log(isAdd);
-  console.log(data);
   const [form] = Form.useForm();
   const onFinish = async (values) => {
     const model = {
@@ -118,7 +116,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
           width: 80,
         }}
       >
-        <Option value="880">+880</Option>
+        <Select.Option value="880">+880</Select.Option>
       </Select>
     </Form.Item>
   );
@@ -197,7 +195,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
           extra="When user will log in first time this password need to be reset"
           rules={[
             {
-              required: true,
+              required: data && data.id !== 0 ? false : true,
               message: "Enter Password",
             },
           ]}
