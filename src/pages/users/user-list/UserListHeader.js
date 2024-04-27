@@ -4,10 +4,11 @@ import { MdAdd } from "react-icons/md";
 
 const { Title } = Typography;
 
-const UserListHeader = ({ showDrawer }) => {
+const UserListHeader = ({ showDrawer, setIsAdd }) => {
   const handleClick = (e) => {
     e.preventDefault();
     showDrawer();
+    setIsAdd(true);
   };
   return (
     <div className="w-full flex items-center justify-between mb-5">
