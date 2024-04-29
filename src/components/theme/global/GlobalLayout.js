@@ -1,24 +1,40 @@
 import React, { useEffect } from "react";
-import { Card, Drawer, Layout, Space } from "antd";
+import { Card, Drawer, Layout, Space, Spin } from "antd";
 import { Toaster } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import Settings from "../settings/Settings";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 import PageHeader from "./PageHeader";
 import { useMediaQuery } from "react-responsive";
-import { MdDashboard } from "react-icons/md";
+
+import { Util } from "../../../util/Util";
+import Login from "../../../pages/login/Login";
+import FullScreenLoader from "./loader/FullScreenLoader";
+const util = new Util();
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const GlobalLayout = () => {
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-  const isMediumScreen = useMediaQuery({ maxWidth: 991 });
+  const [isInvalid, setIsInvalid] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const menus = useSelector((state) => state.auth.menus);
+  const isMediumScreen = useMediaQuery({ maxWidth: 1023 });
 
   const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState("left");
+
+  useEffect(() => {
+    const isinv = util.invalidUser();
+    setIsInvalid(isinv);
+    // Set loading state to false once authentication status is determined
+    setIsLoading(false);
+  }, [isAuthenticated]);
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -42,41 +58,57 @@ const GlobalLayout = () => {
     setCollapsed(!collapsed);
   };
 
+  // Render loading spinner while authentication status is being determined
+  if (isLoading) {
+    return <FullScreenLoader />;
+  }
+
+  // Render login page if not authenticated
+  if (isInvalid) {
+    return <Login />;
+  }
+
+  // Render main content if authenticated
   return (
     <Layout style={{ minHeight: "100vh", borderRadius: 0, height: "100%" }}>
-      {isMediumScreen ? (
-        <Drawer
-          style={{ width: 250, height: "calc(100vh)" }}
-          bodyStyle={{ padding: 0, overflowX: "hidden", overflowY: "auto" }}
-          headerStyle={{ padding: 5 }}
-          placement={placement}
-          width={250}
-          onClose={onClose}
-          open={open}
-        >
-          <Sidebar
-            defaultOpenKeys={[]}
-            collapsed={collapsed}
-            isMediumScreen={isMediumScreen}
-          />
-        </Drawer>
-      ) : (
-        <Sider
-          className="fixed bottom-0 left-0 top-0"
-          width={250}
-          collapsible
-          collapsed={collapsed}
-          collapsedWidth={0}
-          trigger={null}
-        >
-          <Sidebar
-            defaultOpenKeys={[]}
-            collapsed={collapsed}
-            isMediumScreen={isMediumScreen}
-          />
-        </Sider>
+      {!isInvalid && (
+        <div>
+          {isMediumScreen ? (
+            <Drawer
+              style={{ width: 250, height: "calc(100vh)" }}
+              bodyStyle={{ padding: 0, overflowX: "hidden", overflowY: "auto" }}
+              headerStyle={{ padding: 5 }}
+              placement={placement}
+              width={250}
+              onClose={onClose}
+              open={open}
+            >
+              <Sidebar
+                defaultOpenKeys={[]}
+                collapsed={collapsed}
+                isMediumScreen={isMediumScreen}
+                menus={menus}
+              />
+            </Drawer>
+          ) : (
+            <Sider
+              className="fixed bottom-0 left-0 top-0"
+              width={250}
+              collapsible
+              collapsed={collapsed}
+              collapsedWidth={0}
+              trigger={null}
+            >
+              <Sidebar
+                defaultOpenKeys={[]}
+                collapsed={collapsed}
+                isMediumScreen={isMediumScreen}
+                menus={menus}
+              />
+            </Sider>
+          )}
+        </div>
       )}
-
       <Layout style={{ padding: "10px" }}>
         <Space direction="vertical">
           <Card

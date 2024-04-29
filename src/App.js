@@ -8,22 +8,28 @@ import ErrorPage from "./pages/error/ErrorPage";
 import UserList from "./pages/users/user-list/UserList";
 import CreateUser from "./pages/users/create-user/CreateUser";
 import { LoaderWrapper } from "./components/theme/global/loader/LoaderWrapper";
+import { AuthProvider } from "./hooks/useAuth";
+import Login from "./pages/login/Login";
 
 function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <LoaderWrapper>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="*" element={<ErrorPage />} />
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Dashboard />} />
 
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="users" element={<UserList />} />
-              <Route path="user/:id" element={<CreateUser />} />
-            </Route>
-          </Routes>
+                <Route path="*" element={<ErrorPage />} />
+                <Route path="login" element={<Login />} />
+
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="users" element={<UserList />} />
+                <Route path="user/:id" element={<CreateUser />} />
+              </Route>
+            </Routes>
+          </AuthProvider>
         </LoaderWrapper>
       </BrowserRouter>
     </ThemeProvider>

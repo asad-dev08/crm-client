@@ -27,7 +27,7 @@ class JwtService {
     }
   };
 
-  setSession = (access_token) => {
+  setSession = (access_token, refresh_token) => {
     if (access_token) {
       secureLocalStorage.setItem("access_token", access_token);
     } else {

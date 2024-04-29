@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 const UserList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const rowsPerPage = 1;
+  const rowsPerPage = 10;
   const [deleteStatus, setDeleteStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);

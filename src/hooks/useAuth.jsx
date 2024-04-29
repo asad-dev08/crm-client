@@ -5,10 +5,12 @@ import {
   loginUser,
   logout,
   setIsAuthentication,
+  verifyToken,
 } from "../redux/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 import { secureLocalStorage } from "../util/EncryptDecryptJWTToken";
 import jwtService from "../jwtService";
+import toast from "react-hot-toast";
 
 const AuthContext = createContext();
 
@@ -23,26 +25,28 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     jwtService.init();
     // Check token expiration on mount
-    const storedToken = secureLocalStorage.getItem("access_token");
+    const handleAuth = async () => {
+      const storedToken = secureLocalStorage.getItem("access_token");
 
-    if (storedToken) {
-      const isTokenExpired = checkTokenExpiration(storedToken);
-      if (isTokenExpired) {
+      if (storedToken) {
+        const isTokenExpired = checkTokenExpiration(storedToken);
+        if (isTokenExpired) {
+          await dispatch(logout());
+          navigate("/login", { replace: true });
+        } else {
+          await dispatch(verifyToken());
+          await dispatch(setIsAuthentication(true));
+        }
+      } else {
         dispatch(logout());
         navigate("/login", { replace: true });
-      } else {
-        dispatch(setIsAuthentication(true));
       }
-    } else {
-      dispatch(logout());
-      navigate("/login", { replace: true });
-    }
+    };
+    handleAuth();
   }, [dispatch]);
 
   const checkTokenExpiration = (token) => {
     // Implement token expiration check logic
-    // You can use a library like jwt-decode to decode the token and get the expiration time
-    // Example: https://www.npmjs.com/package/jwt-decode
     const decodedToken = jwtDecode(token);
     const currentTime = Date.now() / 1000;
     if (decodedToken.exp < currentTime) {
@@ -58,6 +62,7 @@ export const AuthProvider = ({ children }) => {
   const handleLogin = async (data) => {
     await dispatch(loginUser(data)).then((res) => {
       if (res && res.payload && res.payload.user) {
+        toast.success("Logged in", { duration: 4000 });
         navigate("/dashboard", { replace: true });
       }
     });

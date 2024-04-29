@@ -9,19 +9,12 @@ import toast from "react-hot-toast";
 const util = new Util();
 
 export const makeApiCall = async (method, url, data = null, headers = {}) => {
+  const pathsToSkipTokenCheck = ["/auth/verifyLogin"];
   try {
     const store = require("../redux/store").default;
     store.dispatch(startLoading()); // Dispatch startLoading action
     // Get the authentication token from the AuthContext
     const accessToken = jwtService.getAccessToken();
-    const pathsToSkipTokenCheck = [
-      "/auth/verifyLogin",
-      "/user",
-      "/user/3",
-      "/user/8",
-      "/user/10",
-      "/user-pagination",
-    ];
     const isInvalid = util.invalidUser();
     const isAuthValid = jwtService.isAuthTokenValid(accessToken);
 
@@ -69,15 +62,26 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
     };
 
     // Set up Axios request configuration
-    const config = {
-      method: method.toUpperCase(),
-      url: `${baseUrl}${url}`,
-      data,
-      headers: mergedHeaders,
-      // Add any other configurations here
-    };
+    let config = null;
+
+    if (pathsToSkipTokenCheck.includes(url)) {
+      config = {
+        method: method.toUpperCase(),
+        url: `${baseUrl}${url}`,
+        data,
+      };
+    } else {
+      config = {
+        method: method.toUpperCase(),
+        url: `${baseUrl}${url}`,
+        data,
+        headers: mergedHeaders,
+        // Add any other configurations here
+      };
+    }
 
     // Make the API call using Axios
+    //axios.defaults.withCredentials = true;
     const response = await axios(config);
 
     if (response && response.status === 401) {
@@ -90,8 +94,12 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
     return response;
   } catch (error) {
     // Handle errors
-    console.error("Error:", error.message);
-    toast.error(error.message, { duration: 3000 });
+    if (pathsToSkipTokenCheck.includes(url)) {
+      toast.error(error && error.response && error.response.data.message);
+    } else {
+      console.error("Error:", error.message);
+      toast.error(error.message, { duration: 3000 });
+    }
     //throw error;
   } finally {
     const store = require("../redux/store").default;

@@ -2,8 +2,19 @@ import { Avatar, Button, Divider, Dropdown, Menu } from "antd";
 import React from "react";
 
 import { MdChevronLeft, MdChevronRight, MdPerson } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login", { replace: true });
+  };
+
   const menu = (
     <Menu style={{ width: "110px", textAlign: "left" }}>
       <Menu.Item>
@@ -21,7 +32,7 @@ const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
           justifyContent: "center",
         }}
       >
-        <Button className="w-full" type="primary" danger>
+        <Button className="w-full" type="primary" danger onClick={handleLogout}>
           Sign Out
         </Button>
       </Menu.Item>
