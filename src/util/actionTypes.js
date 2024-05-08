@@ -10,3 +10,6 @@ export const VERIFY_TOKEN_API = "verifyToken";
 export const USER_PAGINATION_CONTROLLER = "user-pagination";
 
 export const USER_CONTROLLER = "user";
+export const MENU_CONTROLLER = "menu";
+export const SECURITY_RULE_CONTROLLER = "security-rule";
+export const PAGINATION_API = "pagination";

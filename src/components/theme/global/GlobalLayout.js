@@ -98,13 +98,15 @@ const GlobalLayout = () => {
               collapsible
               collapsed={collapsed}
               collapsedWidth={0}
-              trigger={null}
+              // trigger={null}
               style={{
                 overflow: "auto",
                 height: "100vh",
                 position: "sticky",
                 top: 0,
                 left: 0,
+                overflowX: "hidden",
+                overflowY: "auto",
               }}
             >
               <Sidebar
@@ -132,8 +134,8 @@ const GlobalLayout = () => {
             showDrawer={showDrawer}
           />
         </Card>
-        <Content style={{ margin: "70px 8px 0", overflow: "initial" }}>
-          <div style={{ padding: 24, background: "#fff", textAlign: "center" }}>
+        <Content style={{ margin: "70px 8px 0", overflow: "auto" }}>
+          <div style={{ textAlign: "center" }}>
             <Outlet />
           </div>
         </Content>

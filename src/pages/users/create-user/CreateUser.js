@@ -221,7 +221,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
           label="Address"
           rules={[
             {
-              message: "Enter Email",
+              message: "Enter Address",
             },
           ]}
         >

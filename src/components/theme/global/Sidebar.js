@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Menu, Layout, Card, Typography } from "antd";
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
-import { MdDashboard } from "react-icons/md";
-const { SubMenu } = Menu;
+import * as AntdIcons from "@ant-design/icons";
+
 const { Title } = Typography;
 
 function convertFlatToNested(items) {
@@ -41,6 +41,11 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
     // Set converted items to state variable
     setMenuItems(nestedItems);
   }, [menus]);
+
+  function CustomIcon(type) {
+    const AntdIcon = AntdIcons[type];
+    return AntdIcon ? <AntdIcon /> : null;
+  }
   function addKeyProperty(menuItem) {
     if (menuItem.children && menuItem.children.length > 0) {
       menuItem.key = menuItem.id;
@@ -50,23 +55,24 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
     }
   }
   menuItems.forEach(addKeyProperty);
-  function getItem(id, label, url, key, children, type) {
+  function getItem(id, label, url, icon, key, children, type) {
     return {
       id,
       key,
       children,
       label,
       url,
+      icon: icon ? CustomIcon(icon) : null,
       type,
     };
   }
 
   function convertMenuItem(menuItem) {
-    const { id, title, url, children } = menuItem;
+    const { id, title, url, icon, children } = menuItem;
     const key = id.toString();
     const childrenItems =
       children.length > 0 ? children.flatMap(convertMenuItem) : undefined;
-    return getItem(id, title, url, key, childrenItems);
+    return getItem(id, title, url, icon, key, childrenItems);
   }
 
   function getLevelKeys(items1) {

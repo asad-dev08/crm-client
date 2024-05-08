@@ -65,6 +65,21 @@ export const themes = {
     colorError: "#dc2626",
   },
 };
+function hexToRGBA(hex, opacity) {
+  // Remove the leading # if present
+  hex = hex.replace("#", "");
+
+  // Parse the hex values
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Ensure opacity is within the range of 0 to 1
+  opacity = Math.min(1, Math.max(0, opacity));
+
+  // Return the RGBA color string
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
 
 const ThemeProvider = ({ children }) => {
   const currentTheme = useSelector((state) => state.theme.currentTheme);
@@ -84,6 +99,11 @@ const ThemeProvider = ({ children }) => {
           fontFamily: `"Inter", sans-serif`,
           Button: {
             primaryShadow: "none !important",
+          },
+          Menu: {
+            // colorItemBgHover: "red",
+            colorItemBgSelected: hexToRGBA(currentTheme.colorPrimary, 0.1),
+            colorItemTextSelected: currentTheme.colorPrimary,
           },
         },
       }}
