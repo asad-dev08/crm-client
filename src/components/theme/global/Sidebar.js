@@ -94,7 +94,8 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
     const findMenuItemByUrl = (items, url, pathIds = []) => {
       for (const item of items) {
         // Check if the current item's URL matches
-        if (matchPath(location.pathname, item.url)) {
+
+        if (item.url && matchPath(location.pathname, item.url)) {
           // Return both the matched item and the path IDs
           return { item, pathIds: [...pathIds, item.key] };
         }
@@ -171,14 +172,13 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
   };
 
   return (
-    <div
-    //   className="fixed bottom-0 left-0 top-0 flex flex-col"
-    >
+    <div className="h-full">
       <Card
-        style={{ borderRadius: 0, width: 250, height: 80 }}
+        style={{ borderRadius: 0, width: 250, height: 62 }}
         bodyStyle={{
           padding: "",
         }}
+        className="flex items-center shadow-sm"
       >
         <Title level={3} style={{ marginBottom: 0 }}>
           CRM
@@ -186,7 +186,7 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
       </Card>
       <Menu
         style={{
-          height: !isMediumScreen ? "calc(100vh - 80px)" : "",
+          height: !isMediumScreen ? "calc(100vh - 62px)" : "",
           overflowY: "auto",
           width: "250px",
           padding: "0 5px",

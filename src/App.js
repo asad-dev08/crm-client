@@ -25,7 +25,7 @@ function App() {
                 <Route path="login" element={<Login />} />
 
                 <Route path="dashboard" element={<Dashboard />} />
-                <Route path="users" element={<UserList />} />
+                <Route path="users/user-list" element={<UserList />} />
                 <Route path="user/:id" element={<CreateUser />} />
               </Route>
             </Routes>

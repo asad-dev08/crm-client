@@ -27,3 +27,19 @@
   justify-content: center;
   align-items: center;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 7px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(99, 97, 97); 
+  border-radius: 10px;
+}

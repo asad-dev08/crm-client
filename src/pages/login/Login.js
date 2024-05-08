@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Button, Card, Form, Input, Layout, Typography } from "antd";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 const Login = () => {
+  const navigate = useNavigate();
   const { handleLogin } = useAuth();
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (user) navigate("/dashboard", { replace: true });
+  }, [user]);
 
   const handleSubmit = async (values) => {
     const { username, password } = values;
@@ -18,6 +26,9 @@ const Login = () => {
       toast.error("Enter username and password", { duration: 3000 });
     }
   };
+  // if (user) {
+  //   navigate("/dashboard", { replace: true });
+  // }
   return (
     <Layout className="h-screen w-full flex items-center justify-center">
       <Card className="min-w-96">

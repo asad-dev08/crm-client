@@ -5,14 +5,17 @@ import { MdChevronLeft, MdChevronRight, MdPerson } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { handleLogout } = useAuth();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/login", { replace: true });
+  const handleLogoutFromApp = async (e) => {
+    e.preventDefault();
+    await dispatch(handleLogout());
+    //navigate("/login", { replace: true });
   };
 
   const menu = (
@@ -32,14 +35,19 @@ const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
           justifyContent: "center",
         }}
       >
-        <Button className="w-full" type="primary" danger onClick={handleLogout}>
+        <Button
+          className="w-full"
+          type="primary"
+          danger
+          onClick={(e) => handleLogoutFromApp(e)}
+        >
           Sign Out
         </Button>
       </Menu.Item>
     </Menu>
   );
   return (
-    <div className="flex items-center justify-between">
+    <div className=" w-full h-full flex items-center justify-between">
       <Button
         type="link"
         onClick={!isMediumScreen ? toggleSider : showDrawer}

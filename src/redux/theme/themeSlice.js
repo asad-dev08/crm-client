@@ -14,6 +14,7 @@ const themeSlice = createSlice({
       colorSuccess: "#16a34a",
       colorWarning: "#ca8a04",
       colorError: "#dc2626",
+      colorBgHeader: "red",
     },
   },
   reducers: {

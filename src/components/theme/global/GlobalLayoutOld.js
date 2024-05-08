@@ -12,12 +12,11 @@ import { useMediaQuery } from "react-responsive";
 import { Util } from "../../../util/Util";
 import Login from "../../../pages/login/Login";
 import FullScreenLoader from "./loader/FullScreenLoader";
-import clsx from "clsx";
 const util = new Util();
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const GlobalLayout = () => {
+const GlobalLayoutOld = () => {
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
   const [isInvalid, setIsInvalid] = useState(true);
@@ -71,7 +70,7 @@ const GlobalLayout = () => {
 
   // Render main content if authenticated
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh", borderRadius: 0, height: "100%" }}>
       {!isInvalid && (
         <div>
           {isMediumScreen ? (
@@ -93,19 +92,12 @@ const GlobalLayout = () => {
             </Drawer>
           ) : (
             <Sider
-              // className="fixed bottom-0 left-0 top-0"
+              className="fixed bottom-0 left-0 top-0"
               width={250}
               collapsible
               collapsed={collapsed}
               collapsedWidth={0}
               trigger={null}
-              style={{
-                overflow: "auto",
-                height: "100vh",
-                position: "sticky",
-                top: 0,
-                left: 0,
-              }}
             >
               <Sidebar
                 defaultOpenKeys={[]}
@@ -117,29 +109,23 @@ const GlobalLayout = () => {
           )}
         </div>
       )}
-      <Layout>
-        <Card
-          className={clsx(
-            "rounded-none fixed top-0 right-0  shadow-sm",
-            !collapsed ? " left-[250px]" : " left-0"
-          )}
-          bodyStyle={{ padding: "0 12px 0 0", height: 60 }}
-        >
-          <PageHeader
-            toggleSider={toggleSider}
-            collapsed={collapsed}
-            isMediumScreen={isMediumScreen}
-            showDrawer={showDrawer}
-          />
-        </Card>
-        <Content style={{ margin: "70px 8px 0", overflow: "initial" }}>
-          <div style={{ padding: 24, background: "#fff", textAlign: "center" }}>
+      <Layout style={{ padding: "10px" }}>
+        <Space direction="vertical">
+          <Card
+            bodyStyle={{ padding: "12px 12px 12px 0px" }}
+            style={{ padding: "0" }}
+          >
+            <PageHeader
+              toggleSider={toggleSider}
+              collapsed={collapsed}
+              isMediumScreen={isMediumScreen}
+              showDrawer={showDrawer}
+            />
+          </Card>
+          <Card>
             <Outlet />
-          </div>
-        </Content>
-        <Footer style={{ textAlign: "center" }}>
-          &copy;{new Date().getFullYear()} | Asadullah Sarker
-        </Footer>
+          </Card>
+        </Space>
       </Layout>
       <Toaster />
       <Settings />
@@ -147,4 +133,4 @@ const GlobalLayout = () => {
   );
 };
 
-export default GlobalLayout;
+export default GlobalLayoutOld;

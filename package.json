@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.16.4",
     "axios": "^1.6.8",
+    "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "js-base64": "^3.7.7",
     "jwt-decode": "^4.0.0",

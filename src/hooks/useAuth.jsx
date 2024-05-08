@@ -69,9 +69,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   // call this function to sign out logged in user
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/", { replace: true });
+  const handleLogout =async () => {
+    await dispatch(logout());
+    //navigate("/");
+    window.location.href ="/login"
   };
 
   const value = useMemo(
