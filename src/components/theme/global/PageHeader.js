@@ -1,9 +1,9 @@
 import { Avatar, Button, Divider, Dropdown, Menu } from "antd";
 import React from "react";
 
-import { MdChevronLeft, MdChevronRight, MdPerson } from "react-icons/md";
+import { MdPerson } from "react-icons/md";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { logout } from "../../../redux/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 
@@ -49,11 +49,11 @@ const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
   return (
     <div className=" w-full h-full flex items-center justify-between">
       <Button
-        type="link"
+        type="text"
+        className="ml-3 rounded-full h-10 w-10 flex items-center justify-center"
         onClick={!isMediumScreen ? toggleSider : showDrawer}
-        className="text-2xl"
       >
-        {React.createElement(collapsed ? MdChevronRight : MdChevronLeft)}
+        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
       </Button>
 
       <Dropdown overlay={menu}>

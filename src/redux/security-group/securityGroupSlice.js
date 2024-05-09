@@ -155,7 +155,7 @@ const securityGroupSlice = createSlice({
   name: "securityGroup",
   initialState: {
     securityGroups: [],
-    seurityGroupsComboList: [],
+    securityGroupsComboList: [],
     loading: false,
     error: null,
   },
@@ -169,15 +169,7 @@ const securityGroupSlice = createSlice({
       .addCase(getSecurityGroupsWithPagination.fulfilled, (state, action) => {
         const data = action.payload.data;
         state.securityGroups = action.payload.data;
-        state.seurityGroupsComboList =
-          data &&
-          data.length > 0 &&
-          data.map((x) => {
-            return {
-              label: x.name,
-              value: x.id,
-            };
-          });
+
         state.loading = false;
         state.error = null;
       })
@@ -206,6 +198,15 @@ const securityGroupSlice = createSlice({
       .addCase(getSecurityGroups.fulfilled, (state, action) => {
         const data = action.payload.data;
         state.securityGroups =
+          data &&
+          data.length > 0 &&
+          data.map((x) => {
+            return {
+              label: x.name,
+              value: x.id,
+            };
+          });
+        state.securityGroupsComboList =
           data &&
           data.length > 0 &&
           data.map((x) => {

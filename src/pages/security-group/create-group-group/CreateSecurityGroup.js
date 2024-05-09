@@ -182,6 +182,7 @@ const CreateSecurityGroup = ({ onClose, open, data, isAdd }) => {
           id: (data && data.id) || 0,
           name: (data && data.name) || "",
           description: (data && data.description) || "",
+          securityRuleIdsSelected: securityRuleIdsSelected || [],
         }}
         scrollToFirstError
       >
@@ -209,7 +210,7 @@ const CreateSecurityGroup = ({ onClose, open, data, isAdd }) => {
           <Input.TextArea rows={4} />
         </Form.Item>{" "}
         <Form.Item
-          name="rules"
+          name="securityRuleIdsSelected"
           label="Security Rules"
           rules={[
             {
@@ -232,6 +233,7 @@ const CreateSecurityGroup = ({ onClose, open, data, isAdd }) => {
                 .localeCompare((optionB?.label ?? "").toLowerCase())
             }
             options={securityRules}
+            value={securityRuleIdsSelected}
             defaultValue={securityRuleIdsSelected}
             onChange={handleChangeSelect}
           />

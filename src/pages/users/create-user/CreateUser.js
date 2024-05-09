@@ -8,11 +8,12 @@ import {
   Space,
   message,
 } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useForm from "../../../hooks/useForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { saveUser, updateUser } from "../../../redux/user/userSlice";
 import toast from "react-hot-toast";
+import { getSecurityGroups } from "../../../redux/security-group/securityGroupSlice";
 
 const defaultForm = {
   id: 0,
@@ -30,14 +31,49 @@ const defaultForm = {
   updated_date: "",
 };
 
+const manipulateGroupList = (list) => {
+  const data =
+    list && list.groupList
+      ? list.groupList.map((obj) => obj.group_id.toString())
+      : [];
+  return data;
+};
 const CreateUser = ({ onClose, open, data, isAdd }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const securityGroups = useSelector(
+    (state) => state.securityGroup.securityGroupsComboList
+  );
+
+  const [securityGroupIds, setSecurityGroupIds] = useState("");
+  const [securityGroupList, setSecurityGroupList] = useState([]);
+  const [securityGroupListFinal, setSecurityGroupListFinal] = useState([]);
+
+  const securityGroupIdsSelected = manipulateGroupList(data);
+
+  useEffect(() => {
+    dispatch(getSecurityGroups());
+  }, []);
+
+  useEffect(() => {
+    if (data && data.groupList && data.groupList.length > 0) {
+      setSecurityGroupList(data.groupList);
+      setSecurityGroupListFinal(data.groupList);
+    }
+  }, [data]);
+
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    form.submit();
+  };
+
   const onFinish = async (values) => {
     const model = {
       ...values,
       id: isAdd ? 0 : data.id,
+      groupList: securityGroupList || [],
     };
+
     try {
       if (isAdd) {
         await dispatch(saveUser(model))
@@ -120,6 +156,37 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
       </Select>
     </Form.Item>
   );
+  const handleChangeSelect = (value) => {
+    setSecurityGroupIds(value);
+    let items = value.toString().split(",");
+
+    // Convert the array elements into objects
+    let objects = items.map((item) => ({ group_id: item }));
+
+    let tmpList = [];
+    for (const obj of objects) {
+      const findExisting = securityGroupListFinal.find(
+        (x) => x.group_id === obj.group_id
+      );
+
+      if (findExisting) {
+        let tmpObj = {
+          id: findExisting.id,
+          group_id: obj.group_id,
+        };
+        tmpList.push(tmpObj);
+      } else {
+        let tmpObj = {
+          id: null,
+          group_id: obj.group_id,
+        };
+        tmpList.push(tmpObj);
+      }
+    }
+
+    setSecurityGroupList(tmpList);
+  };
+
   return (
     <Drawer
       title="Add/Edit User"
@@ -128,6 +195,13 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
       onClose={onClose}
       open={open}
       maskClosable={false}
+      extra={
+        <Space>
+          <Button type="primary" htmlType="button" onClick={handleSaveClick}>
+            Save
+          </Button>
+        </Space>
+      }
     >
       <Form
         {...formItemLayout}
@@ -142,10 +216,13 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
           password: "",
           email: (data && data.email) || "",
           full_name: (data && data.full_name) || "",
-          is_active: (data && data.is_active) || true,
+          is_active: data && data.is_active,
+          is_admin: data && data.is_admin,
           phone: (data && data.phone) || "",
           address: (data && data.address) || "",
           isPasswordReset: (data && data.isPasswordReset) || false,
+
+          securityGroupIdsSelected: securityGroupIdsSelected || [],
         }}
         scrollToFirstError
       >
@@ -228,16 +305,47 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
           <Input.TextArea rows={4} />
         </Form.Item>
         <Form.Item
+          name="securityGroupIdsSelected"
+          label="Security Rules"
+          rules={[
+            {
+              required: true,
+              message: "Please select one or more security groups!",
+            },
+          ]}
+        >
+          <Select
+            showSearch
+            mode="multiple"
+            placeholder="Search to Select Security Groups"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option?.label ?? "").includes(input)
+            }
+            filterSort={(optionA, optionB) =>
+              (optionA?.label ?? "")
+                .toLowerCase()
+                .localeCompare((optionB?.label ?? "").toLowerCase())
+            }
+            options={securityGroups}
+            value={securityGroupIdsSelected}
+            defaultValue={securityGroupIdsSelected}
+            onChange={handleChangeSelect}
+          />
+        </Form.Item>
+        <Form.Item
           name="is_active"
           valuePropName="checked"
           {...tailFormItemLayout}
         >
           <Checkbox>Active?</Checkbox>
         </Form.Item>
-        <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
+        <Form.Item
+          name="is_admin"
+          valuePropName="checked"
+          {...tailFormItemLayout}
+        >
+          <Checkbox>Admin?</Checkbox>
         </Form.Item>
       </Form>
     </Drawer>
