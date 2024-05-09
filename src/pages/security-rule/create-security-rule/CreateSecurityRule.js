@@ -12,7 +12,7 @@ import {
   Tabs,
   Tree,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useDispatch } from "react-redux";
 import {
@@ -58,6 +58,25 @@ function convertFlatToNested(items) {
 const CreateSecurityRule = ({ onClose, open, data, isAdd, menus }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [selectedPermissions, setSelectedPermissions] = useState({});
+
+  useEffect(() => {
+    if (data && data.permissionList && data.permissionList.length > 0) {
+      const newSelectedPermissions = { ...selectedPermissions };
+      for (const per of data.permissionList) {
+        if (!newSelectedPermissions[per.menu_id]) {
+          newSelectedPermissions[per.menu_id] = {};
+        }
+        newSelectedPermissions[per.menu_id]["permission_id"] = per.id;
+        newSelectedPermissions[per.menu_id]["can_view"] = !!per.can_view;
+        newSelectedPermissions[per.menu_id]["can_create"] = !!per.can_create;
+        newSelectedPermissions[per.menu_id]["can_update"] = !!per.can_update;
+        newSelectedPermissions[per.menu_id]["can_delete"] = !!per.can_delete;
+        newSelectedPermissions[per.menu_id]["can_report"] = !!per.can_report;
+      }
+      setSelectedPermissions(newSelectedPermissions);
+    }
+  }, [data]);
 
   const menuTree = convertFlatToNested(menus);
 
@@ -72,7 +91,7 @@ const CreateSecurityRule = ({ onClose, open, data, isAdd, menus }) => {
       id: isAdd ? 0 : data.id,
       menuPermissionList: selectedPermissions,
     };
-    console.log("val: ", model);
+
     try {
       if (isAdd) {
         await dispatch(saveSecurityRule(model))
@@ -133,7 +152,6 @@ const CreateSecurityRule = ({ onClose, open, data, isAdd, menus }) => {
       },
     },
   };
-  const [selectedPermissions, setSelectedPermissions] = useState({});
 
   const handleCheckboxChange = (e, id, field) => {
     const newSelectedPermissions = { ...selectedPermissions };

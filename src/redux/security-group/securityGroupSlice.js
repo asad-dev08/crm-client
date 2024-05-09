@@ -1,19 +1,19 @@
-// src/redux/securityRuleSlice.js
+// src/redux/securityGroupSlice.js
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { makeApiCall } from "../../util/makeAPICall";
 import {
-  SECURITY_RULE_CONTROLLER,
+  SECURITY_GROUP_CONTROLLER,
   PAGINATION_API,
 } from "../../util/actionTypes";
 
-export const getSecurityRulesWithPagination = createAsyncThunk(
-  "securityRule/getSecurityRulesWithPagination",
+export const getSecurityGroupsWithPagination = createAsyncThunk(
+  "securityGroup/getSecurityGroupsWithPagination",
   async (obj, { rejectWithValue }) => {
     try {
       const response = await makeApiCall(
         "post",
-        `/${SECURITY_RULE_CONTROLLER}/${PAGINATION_API}`,
+        `/${SECURITY_GROUP_CONTROLLER}/${PAGINATION_API}`,
         obj,
         {}
       );
@@ -31,13 +31,13 @@ export const getSecurityRulesWithPagination = createAsyncThunk(
     }
   }
 );
-export const saveSecurityRule = createAsyncThunk(
-  "securityRule/saveSecurityRule",
+export const saveSecurityGroup = createAsyncThunk(
+  "securityGroup/saveSecurityGroup",
   async (obj, { rejectWithValue }) => {
     try {
       const response = await makeApiCall(
         "post",
-        `/${SECURITY_RULE_CONTROLLER}`,
+        `/${SECURITY_GROUP_CONTROLLER}`,
         obj,
         {}
       );
@@ -55,13 +55,13 @@ export const saveSecurityRule = createAsyncThunk(
     }
   }
 );
-export const updateSecurityRule = createAsyncThunk(
-  "securityRule/updateSecurityRule",
+export const updateSecurityGroup = createAsyncThunk(
+  "securityGroup/updateSecurityGroup",
   async (obj, { rejectWithValue }) => {
     try {
       const response = await makeApiCall(
         "put",
-        `/${SECURITY_RULE_CONTROLLER}/${obj.id}`,
+        `/${SECURITY_GROUP_CONTROLLER}/${obj.id}`,
         obj,
         {}
       );
@@ -80,13 +80,13 @@ export const updateSecurityRule = createAsyncThunk(
   }
 );
 
-export const getSecurityRules = createAsyncThunk(
-  "securityRule/getSecurityRules",
+export const getSecurityGroups = createAsyncThunk(
+  "securityGroup/getSecurityGroups",
   async (id, { rejectWithValue }) => {
     try {
       const response = await makeApiCall(
         "get",
-        `/${SECURITY_RULE_CONTROLLER}`,
+        `/${SECURITY_GROUP_CONTROLLER}`,
 
         {}
       );
@@ -104,13 +104,13 @@ export const getSecurityRules = createAsyncThunk(
     }
   }
 );
-export const getSecurityRule = createAsyncThunk(
-  "securityRule/getSecurityRule",
+export const getSecurityGroup = createAsyncThunk(
+  "securityGroup/getSecurityGroup",
   async (id, { rejectWithValue }) => {
     try {
       const response = await makeApiCall(
         "get",
-        `/${SECURITY_RULE_CONTROLLER}/${id}`,
+        `/${SECURITY_GROUP_CONTROLLER}/${id}`,
 
         {}
       );
@@ -128,13 +128,13 @@ export const getSecurityRule = createAsyncThunk(
     }
   }
 );
-export const deleteSecurityRule = createAsyncThunk(
-  "securityRule/deleteSecurityRule",
+export const deleteSecurityGroup = createAsyncThunk(
+  "securityGroup/deleteSecurityGroup",
   async (id, { rejectWithValue }) => {
     try {
       const response = await makeApiCall(
         "delete",
-        `/${SECURITY_RULE_CONTROLLER}/${id}`,
+        `/${SECURITY_GROUP_CONTROLLER}/${id}`,
         {}
       );
 
@@ -151,25 +151,25 @@ export const deleteSecurityRule = createAsyncThunk(
     }
   }
 );
-const securityRuleSlice = createSlice({
-  name: "securityRule",
+const securityGroupSlice = createSlice({
+  name: "securityGroup",
   initialState: {
-    securityRules: [],
-    securityRulesComboList: [],
+    securityGroups: [],
+    seurityGroupsComboList: [],
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getSecurityRulesWithPagination.pending, (state) => {
+      .addCase(getSecurityGroupsWithPagination.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getSecurityRulesWithPagination.fulfilled, (state, action) => {
+      .addCase(getSecurityGroupsWithPagination.fulfilled, (state, action) => {
         const data = action.payload.data;
-        state.securityRules = action.payload.data;
-        state.securityRulesComboList =
+        state.securityGroups = action.payload.data;
+        state.seurityGroupsComboList =
           data &&
           data.length > 0 &&
           data.map((x) => {
@@ -181,40 +181,31 @@ const securityRuleSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
-      .addCase(getSecurityRulesWithPagination.rejected, (state, action) => {
-        state.securityRules = [];
+      .addCase(getSecurityGroupsWithPagination.rejected, (state, action) => {
+        state.securityGroups = [];
         state.loading = false;
         state.error = action.payload;
       })
 
-      .addCase(saveSecurityRule.pending, (state) => {
+      .addCase(saveSecurityGroup.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(saveSecurityRule.fulfilled, (state, action) => {
+      .addCase(saveSecurityGroup.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
       })
-      .addCase(saveSecurityRule.rejected, (state, action) => {
+      .addCase(saveSecurityGroup.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getSecurityRules.pending, (state) => {
+      .addCase(getSecurityGroups.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getSecurityRules.fulfilled, (state, action) => {
+      .addCase(getSecurityGroups.fulfilled, (state, action) => {
         const data = action.payload.data;
-        state.securityRules =
-          data &&
-          data.length > 0 &&
-          data.map((x) => {
-            return {
-              label: x.name,
-              value: x.id,
-            };
-          });
-        state.securityRulesComboList =
+        state.securityGroups =
           data &&
           data.length > 0 &&
           data.map((x) => {
@@ -226,12 +217,12 @@ const securityRuleSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
-      .addCase(getSecurityRules.rejected, (state, action) => {
+      .addCase(getSecurityGroups.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const {} = securityRuleSlice.actions;
-export default securityRuleSlice.reducer;
+export const {} = securityGroupSlice.actions;
+export default securityGroupSlice.reducer;

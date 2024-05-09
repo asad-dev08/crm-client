@@ -11,6 +11,7 @@ import { LoaderWrapper } from "./components/theme/global/loader/LoaderWrapper";
 import { AuthProvider } from "./hooks/useAuth";
 import Login from "./pages/login/Login";
 import SecurityRuleList from "./pages/security-rule/security-rule-list/SecurityRuleList";
+import SecurityGroupList from "./pages/security-group/security-group-list/SecurityGroupList";
 
 function App() {
   return (
@@ -27,13 +28,15 @@ function App() {
 
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="users/user-list" element={<UserList />} />
-                <Route path="user/:id" element={<CreateUser />} />
 
                 <Route
                   path="security-rule/security-rule-list"
                   element={<SecurityRuleList />}
                 />
-                {/* <Route path="security-rule/:id" element={<CreateUser />} /> */}
+                <Route
+                  path="security-group/security-group-list"
+                  element={<SecurityGroupList />}
+                />
               </Route>
             </Routes>
           </AuthProvider>

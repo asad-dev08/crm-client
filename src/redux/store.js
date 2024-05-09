@@ -7,6 +7,7 @@ import userReducer from "./user/userSlice";
 import authReducer from "./auth/authSlice";
 import menuReducer from "./menu/menuSlice";
 import securityRuleReducer from "./security-rule/securityRuleSlice";
+import securityGroupReducer from "./security-group/securityGroupSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     auth: authReducer,
     menu: menuReducer,
     securityRule: securityRuleReducer,
+    securityGroup: securityGroupReducer,
   },
 });
 export default store;
