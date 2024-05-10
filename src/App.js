@@ -12,6 +12,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import Login from "./pages/login/Login";
 import SecurityRuleList from "./pages/security-rule/security-rule-list/SecurityRuleList";
 import SecurityGroupList from "./pages/security-group/security-group-list/SecurityGroupList";
+import Calendar from "./pages/calendar/EventCalendar";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
                 <Route path="login" element={<Login />} />
 
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="calendar" element={<Calendar />} />
                 <Route path="users/user-list" element={<UserList />} />
 
                 <Route

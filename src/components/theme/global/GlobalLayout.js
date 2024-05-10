@@ -122,7 +122,7 @@ const GlobalLayout = () => {
       <Layout>
         <Card
           className={clsx(
-            "rounded-none fixed top-0 right-0  shadow-sm",
+            "rounded-none fixed top-0 right-0  shadow-sm z-[999]",
             !collapsed ? " left-[250px]" : " left-0"
           )}
           bodyStyle={{ padding: "0 12px 0 0", height: 60 }}

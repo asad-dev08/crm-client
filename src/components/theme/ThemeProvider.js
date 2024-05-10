@@ -65,7 +65,7 @@ export const themes = {
     colorError: "#dc2626",
   },
 };
-function hexToRGBA(hex, opacity) {
+export function hexToRGBA(hex, opacity) {
   // Remove the leading # if present
   hex = hex.replace("#", "");
 
