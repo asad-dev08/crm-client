@@ -13,6 +13,8 @@ import Login from "./pages/login/Login";
 import SecurityRuleList from "./pages/security-rule/security-rule-list/SecurityRuleList";
 import SecurityGroupList from "./pages/security-group/security-group-list/SecurityGroupList";
 import Calendar from "./pages/calendar/EventCalendar";
+import { Toaster } from "react-hot-toast";
+import Settings from "./components/theme/settings/Settings";
 
 function App() {
   return (
@@ -44,6 +46,9 @@ function App() {
           </AuthProvider>
         </LoaderWrapper>
       </BrowserRouter>
+
+      <Toaster />
+      <Settings />
     </ThemeProvider>
   );
 }

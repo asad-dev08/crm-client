@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { Card, Drawer, Layout, Space, Spin } from "antd";
-import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import Settings from "../settings/Settings";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 import PageHeader from "./PageHeader";
@@ -143,8 +141,6 @@ const GlobalLayout = () => {
           &copy;{new Date().getFullYear()} | Asadullah Sarker
         </Footer>
       </Layout>
-      <Toaster />
-      <Settings />
     </Layout>
   );
 };

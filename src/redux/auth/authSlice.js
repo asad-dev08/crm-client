@@ -24,13 +24,16 @@ export const loginUser = createAsyncThunk(
         // Handle non-successful responses
         throw new Error("Login failed");
       }
+      if (response && response.hasError) {
+        return { ...response.data.data, notFound: true };
+      }
 
       const data = await response.data;
+
       if (data) {
         jwtService.setSession(data && data.data.token);
         jwtService.setUserData(data && data.data.user);
       }
-
       return data.data;
     } catch (error) {
       return rejectWithValue(error.message); // Pass the error message to the rejectWithValue payload

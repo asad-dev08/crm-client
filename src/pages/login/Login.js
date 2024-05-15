@@ -30,7 +30,7 @@ const Login = () => {
   //   navigate("/dashboard", { replace: true });
   // }
   return (
-    <Layout className="h-screen w-full flex items-center justify-center">
+    <div className="h-screen w-full flex items-center justify-center">
       <Card className="min-w-96">
         <Title level={4} className="text-center pb-5">
           Login
@@ -66,7 +66,7 @@ const Login = () => {
           </Form.Item>
         </Form>
       </Card>
-    </Layout>
+    </div>
   );
 };
 export default Login;

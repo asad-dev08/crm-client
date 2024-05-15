@@ -1,12 +1,9 @@
-import { Card } from 'antd'
-import React from 'react'
+import { Card } from "antd";
+import React from "react";
 
 const Dashboard = () => {
-  return (
-    <div>
-      Dashboard
-    </div>
-  )
-}
+  console.log("hi");
+  return <div>Dashboard</div>;
+};
 
-export default Dashboard
+export default Dashboard;

@@ -94,8 +94,10 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
     return response;
   } catch (error) {
     // Handle errors
+
     if (pathsToSkipTokenCheck.includes(url)) {
       toast.error(error && error.response && error.response.data.message);
+      return { data: error.response, hasError: true };
     } else {
       console.error("Error:", error.message);
       toast.error(error.message, { duration: 3000 });
