@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Table, Typography } from "antd";
+import { Button, Pagination, Table, Typography } from "antd";
 
 const { Text } = Typography;
 
@@ -11,25 +11,32 @@ const PaginatedDataGrid = ({
 }) => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    fetchData(currentPage)
+    fetchData(currentPage, rowsPerPage)
       .then((response) => {
         // Manipulate data before setting it
         const manipulatedData = dataManipulator
           ? dataManipulator(response.data)
           : response.data;
+
         setData(manipulatedData);
-        setTotalPages(response.totalPages);
+        setTotalItems(response.total);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [currentPage, fetchData, dataManipulator]);
+  }, [currentPage, fetchData, dataManipulator, rowsPerPage]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const onShowSizeChange = (current, pageSize) => {
+    setCurrentPage(current);
+    setRowsPerPage(pageSize);
   };
 
   if (data && data.length === 0) {
@@ -50,8 +57,8 @@ const PaginatedDataGrid = ({
         }))}
         pagination={false}
       />
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+      <div className="text-center my-5">
+        {/* {Array.from({ length: totalPages }, (_, index) => index + 1).map(
           (page) => (
             <Button
               key={page}
@@ -64,7 +71,14 @@ const PaginatedDataGrid = ({
               {page}
             </Button>
           )
-        )}
+        )} */}
+        <Pagination
+          showSizeChanger
+          onShowSizeChange={onShowSizeChange}
+          onChange={handlePageChange}
+          defaultCurrent={currentPage}
+          total={totalItems}
+        />
       </div>
     </div>
   );

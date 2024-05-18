@@ -6,6 +6,8 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import { logout } from "../../../redux/auth/authSlice";
+import toast from "react-hot-toast";
 
 const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
   const dispatch = useDispatch();
@@ -14,8 +16,9 @@ const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
 
   const handleLogoutFromApp = async (e) => {
     e.preventDefault();
-    await dispatch(handleLogout());
-    //navigate("/login", { replace: true });
+    dispatch(logout());
+    toast.success("Logged Out", { duration: 4000 });
+    navigate("/login", { replace: true });
   };
 
   const menu = (

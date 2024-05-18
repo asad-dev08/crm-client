@@ -17,7 +17,6 @@ import CreateSecurityGroup from "../create-group-group/CreateSecurityGroup";
 const SecurityGroupList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const rowsPerPage = 10;
   const [deleteStatus, setDeleteStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
@@ -109,11 +108,11 @@ const SecurityGroupList = () => {
       ...item,
     }));
   };
-  const fetchData = async (page = 0, pageSize = rowsPerPage) => {
+  const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
       getSecurityGroupsWithPagination({
         tableName: "security-group",
-        page: page - 1,
+        page: page,
         pageSize: pageSize,
       })
     );
@@ -123,7 +122,6 @@ const SecurityGroupList = () => {
       data: (data && data.rows) || [],
 
       total: (data && data.total.total) || 0,
-      totalPages: (data && Math.ceil(data.total.total / rowsPerPage)) || 0,
     };
   };
   useEffect(() => {

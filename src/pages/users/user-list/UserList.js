@@ -16,7 +16,6 @@ import toast from "react-hot-toast";
 const UserList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const rowsPerPage = 10;
   const [deleteStatus, setDeleteStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
@@ -108,11 +107,11 @@ const UserList = () => {
       ...item,
     }));
   };
-  const fetchData = async (page = 0, pageSize = rowsPerPage) => {
+  const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
       getUsersWithPagination({
         tableName: "users",
-        page: page - 1,
+        page: page,
         pageSize: pageSize,
       })
     );
@@ -122,7 +121,7 @@ const UserList = () => {
       data: (data && data.rows) || [],
 
       total: (data && data.total.total) || 0,
-      totalPages: (data && Math.ceil(data.total.total / rowsPerPage)) || 0,
+      // totalPages: (data && Math.ceil(data.total.total / rowsPerPage)) || 0,
     };
   };
   useEffect(() => {

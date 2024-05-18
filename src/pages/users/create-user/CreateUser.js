@@ -87,7 +87,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
                 response && response.payload && response.payload.message,
                 { duration: 3000 }
               );
-              form.resetFields();
+              // form.resetFields();
             }
           })
           .catch((error) => {

@@ -62,17 +62,16 @@ export const AuthProvider = ({ children }) => {
   const handleLogin = async (data) => {
     await dispatch(loginUser(data)).then((res) => {
       if (res && res.payload && res.payload.user) {
+        const firstMenu =
+          (res.payload.menus &&
+            res.payload.menus.length > 0 &&
+            res.payload.menus[0].url) ||
+          undefined;
         toast.success("Logged in", { duration: 4000 });
-        navigate("/dashboard", { replace: true });
+        if (firstMenu) navigate(firstMenu, { replace: true });
+        else navigate("/error", { replace: true });
       }
     });
-  };
-
-  // call this function to sign out logged in user
-  const handleLogout = async () => {
-    await dispatch(logout());
-    //navigate("/");
-    window.location.href = "/login";
   };
 
   const value = useMemo(
@@ -80,9 +79,8 @@ export const AuthProvider = ({ children }) => {
       user,
       token,
       handleLogin,
-      handleLogout,
     }),
-    [user, handleLogin, handleLogout]
+    [user, handleLogin]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -5,6 +5,7 @@ export const SESSION_TIMEOUT = 5;
 
 export const AUTH_CONTROLLER = "auth";
 export const VERIFY_LOGIN_API = "verifyLogin";
+export const LOGOUT = "logout";
 export const VERIFY_TOKEN_API = "verifyToken";
 
 export const USER_PAGINATION_CONTROLLER = "user-pagination";

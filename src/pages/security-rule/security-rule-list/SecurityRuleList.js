@@ -17,7 +17,6 @@ import { getMenus } from "../../../redux/menu/menuSlice";
 const SecurityRuleList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const rowsPerPage = 10;
   const [deleteStatus, setDeleteStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
@@ -115,11 +114,11 @@ const SecurityRuleList = () => {
       ...item,
     }));
   };
-  const fetchData = async (page = 0, pageSize = rowsPerPage) => {
+  const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
       getSecurityRulesWithPagination({
         tableName: "security-rule",
-        page: page - 1,
+        page: page,
         pageSize: pageSize,
       })
     );
@@ -129,7 +128,6 @@ const SecurityRuleList = () => {
       data: (data && data.rows) || [],
 
       total: (data && data.total.total) || 0,
-      totalPages: (data && Math.ceil(data.total.total / rowsPerPage)) || 0,
     };
   };
   useEffect(() => {
