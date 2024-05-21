@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
 import { Button, Card, Form, Input, Layout, Typography } from "antd";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../redux/auth/authSlice";
 
 const { Title } = Typography;
 
 const Login = () => {
   const navigate = useNavigate();
-  const { handleLogin } = useAuth();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -21,7 +21,28 @@ const Login = () => {
 
     if (username !== "" && password !== "") {
       // Replace with actual authentication logic
-      await handleLogin({ username, password });
+      //await handleLogin({ username, password });
+      const data = {
+        username,
+        password,
+      };
+      await dispatch(loginUser(data))
+        .then((res) => {
+          if (res && res.payload && res.payload.user) {
+            const firstMenu =
+              (res.payload.menus &&
+                res.payload.menus.length > 0 &&
+                res.payload.menus[0].url) ||
+              undefined;
+            console.log("first: ", firstMenu);
+            toast.success("Logged in", { duration: 4000 });
+            if (firstMenu) navigate(firstMenu, { replace: true });
+            else navigate("/error", { replace: true });
+          }
+        })
+        .catch((err) => {
+          console.log("error: ", err);
+        });
     } else {
       toast.error("Enter username and password", { duration: 3000 });
     }

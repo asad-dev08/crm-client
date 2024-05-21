@@ -2,25 +2,39 @@ import React, { useEffect, useState } from "react";
 import PaginatedDataGrid from "../../../components/theme/global/datagrid/PaginatedDataGrid";
 import UserListHeader from "./UserListHeader";
 import CreateUser from "../create-user/CreateUser";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   deleteUser,
   getUser,
   getUsersWithPagination,
 } from "../../../redux/user/userSlice";
 import { Button, Dropdown, Menu, Modal } from "antd";
-import { MdMoreVert } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdMoreVert,
+  MdOutlineModeEdit,
+  MdOutlineRemoveRedEye,
+} from "react-icons/md";
 import toast from "react-hot-toast";
+import { getPermissionsForMenu } from "../../../util/helper";
+import { EyeOutlined } from "@ant-design/icons";
 
 const UserList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [deleteStatus, setDeleteStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const menus = useSelector((state) => state.auth.menus);
+
+  const permission = getPermissionsForMenu(
+    menus,
+    location && location.pathname
+  );
 
   const showDrawer = () => {
     setOpen(true);
@@ -36,11 +50,29 @@ const UserList = () => {
   };
   const getMenu = (row) => (
     <Menu onClick={(e) => handleMenuClick(e, row)}>
-      <Menu.Item key="edit">Edit</Menu.Item>
-      <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, row)}>
-        Delete
-      </Menu.Item>
-      <Menu.Item key="view">View</Menu.Item>
+      {permission && permission.can_update ? (
+        <Menu.Item key="edit">
+          <div className="flex items-center gap-2">
+            <MdOutlineModeEdit /> Edit
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_delete ? (
+        <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, row)}>
+          <div className="flex items-center gap-2">
+            <MdDeleteOutline />
+            Delete
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_view ? (
+        <Menu.Item key="view">
+          <div className="flex items-center gap-2">
+            <MdOutlineRemoveRedEye />
+            View
+          </div>
+        </Menu.Item>
+      ) : null}
     </Menu>
   );
   const handleMenuClick = async (e, row) => {
@@ -132,7 +164,11 @@ const UserList = () => {
   }, [deleteStatus]);
   return (
     <div>
-      <UserListHeader showDrawer={showDrawer} setIsAdd={setAddOrEdit} />
+      <UserListHeader
+        showDrawer={showDrawer}
+        setIsAdd={setAddOrEdit}
+        permission={permission}
+      />
       <PaginatedDataGrid
         columns={columns}
         fetchData={fetchData}

@@ -5,14 +5,12 @@ import { MdPerson } from "react-icons/md";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth";
 import { logout } from "../../../redux/auth/authSlice";
 import toast from "react-hot-toast";
 
 const PageHeader = ({ toggleSider, collapsed, isMediumScreen, showDrawer }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { handleLogout } = useAuth();
 
   const handleLogoutFromApp = async (e) => {
     e.preventDefault();

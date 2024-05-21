@@ -37,17 +37,16 @@
 ::-webkit-scrollbar-track {
   border-radius: 7px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(99, 97, 97); 
+  background: rgb(99, 97, 97);
   border-radius: 5px;
 }
 
 .ant-menu-sub {
   background-color: transparent !important;
 }
-
 
 .events {
   margin: 0;
@@ -69,7 +68,6 @@
   font-weight: bold;
   font-size: 16px !important;
 }
-
 
 .notes-month section {
   font-size: 28px;

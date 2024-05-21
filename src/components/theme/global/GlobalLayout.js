@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Card, Drawer, Layout, Space, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
 import PageHeader from "./PageHeader";
@@ -11,6 +11,7 @@ import { Util } from "../../../util/Util";
 import Login from "../../../pages/login/Login";
 import FullScreenLoader from "./loader/FullScreenLoader";
 import clsx from "clsx";
+import { useAuth } from "../../../hooks/useAuth";
 const util = new Util();
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -26,6 +27,7 @@ const GlobalLayout = () => {
 
   const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState("left");
+  const { token } = useAuth();
 
   useEffect(() => {
     const isinv = util.invalidUser();
@@ -64,7 +66,7 @@ const GlobalLayout = () => {
 
   // Render login page if not authenticated
   if (isInvalid) {
-    return <Login />;
+    return <Navigate to="/login" replace={true} />;
   }
 
   // Render main content if authenticated
