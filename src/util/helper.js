@@ -17,15 +17,15 @@ export const getPermissionsForMenu = (menus, path) => {
 export const isAllowed = (permissionType, permission) => {
   switch (permissionType) {
     case "view":
-      return permission.can_view;
+      return permission && permission.can_view;
     case "add":
-      return permission.can_create;
+      return permission && permission.can_create;
     case "edit":
-      return permission.can_update;
+      return permission && permission.can_update;
     case "delete":
-      return permission.can_delete;
+      return permission && permission.can_delete;
     case "report":
-      return permission.can_report;
+      return permission && permission.can_report;
     default:
       return false;
   }

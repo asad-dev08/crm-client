@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveUser, updateUser } from "../../../redux/user/userSlice";
 import toast from "react-hot-toast";
 import { getSecurityGroups } from "../../../redux/security-group/securityGroupSlice";
+import { getCompanys } from "../../../redux/company/companySlice";
 
 const defaultForm = {
   id: 0,
@@ -44,15 +45,18 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
   const securityGroups = useSelector(
     (state) => state.securityGroup.securityGroupsComboList
   );
+  const companies = useSelector((state) => state.company.companyForComboList);
 
   const [securityGroupIds, setSecurityGroupIds] = useState("");
   const [securityGroupList, setSecurityGroupList] = useState([]);
   const [securityGroupListFinal, setSecurityGroupListFinal] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState(null);
 
   const securityGroupIdsSelected = manipulateGroupList(data);
 
   useEffect(() => {
     dispatch(getSecurityGroups());
+    dispatch(getCompanys());
   }, []);
 
   useEffect(() => {
@@ -87,7 +91,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
                 response && response.payload && response.payload.message,
                 { duration: 3000 }
               );
-              // form.resetFields();
+              form.resetFields();
             }
           })
           .catch((error) => {
@@ -187,6 +191,10 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
     setSecurityGroupList(tmpList);
   };
 
+  const handleChange = (value) => {
+    setSelectedCompany(value);
+  };
+
   return (
     <Drawer
       title="Add/Edit User"
@@ -223,6 +231,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
           isPasswordReset: (data && data.isPasswordReset) || false,
 
           securityGroupIdsSelected: securityGroupIdsSelected || [],
+          company_id: (data && data.company_id) || "",
         }}
         scrollToFirstError
       >
@@ -290,7 +299,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
             },
           ]}
         >
-          <Input addonBefore={prefixSelector} style={{ width: "100%" }} />
+          <Input style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -331,6 +340,24 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
             value={securityGroupIdsSelected}
             defaultValue={securityGroupIdsSelected}
             onChange={handleChangeSelect}
+          />
+        </Form.Item>
+        <Form.Item
+          className="!w-full"
+          name="company_id"
+          label="Company"
+          rules={[
+            {
+              required: true,
+              message: "Please select the company of this user.",
+            },
+          ]}
+        >
+          <Select
+            className="w-full"
+            options={companies}
+            defaultValue={(data && data.company_id) || null}
+            onChange={handleChange}
           />
         </Form.Item>
         <Form.Item

@@ -2,19 +2,26 @@ import React, { useEffect, useState } from "react";
 import PaginatedDataGrid from "../../../components/theme/global/datagrid/PaginatedDataGrid";
 import SecurityRuleListHeader from "./SecurityRuleListHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   deleteSecurityRule,
   getSecurityRule,
   getSecurityRulesWithPagination,
 } from "../../../redux/security-rule/securityRuleSlice";
 import { Button, Card, Dropdown, Menu, Modal } from "antd";
-import { MdMoreVert } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdMoreVert,
+  MdOutlineModeEdit,
+  MdOutlineRemoveRedEye,
+} from "react-icons/md";
 import toast from "react-hot-toast";
 import CreateSecurityRule from "../create-security-rule/CreateSecurityRule";
 import { getMenus } from "../../../redux/menu/menuSlice";
+import { getPermissionsForMenu } from "../../../util/helper";
 
 const SecurityRuleList = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [deleteStatus, setDeleteStatus] = useState(false);
@@ -24,6 +31,12 @@ const SecurityRuleList = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const menus = useSelector((state) => state.menu.menus);
+  const menusPermission = useSelector((state) => state.auth.menus);
+
+  const permission = getPermissionsForMenu(
+    menusPermission,
+    location && location.pathname
+  );
 
   useEffect(() => {
     dispatch(getMenus());
@@ -41,13 +54,32 @@ const SecurityRuleList = () => {
   const onClose = () => {
     setOpen(false);
   };
+
   const getMenu = (row) => (
     <Menu onClick={(e) => handleMenuClick(e, row)}>
-      <Menu.Item key="edit">Edit</Menu.Item>
-      <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, row)}>
-        Delete
-      </Menu.Item>
-      <Menu.Item key="view">View</Menu.Item>
+      {permission && permission.can_update ? (
+        <Menu.Item key="edit">
+          <div className="flex items-center gap-2">
+            <MdOutlineModeEdit /> Edit
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_delete ? (
+        <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, row)}>
+          <div className="flex items-center gap-2">
+            <MdDeleteOutline />
+            Delete
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_view ? (
+        <Menu.Item key="view">
+          <div className="flex items-center gap-2">
+            <MdOutlineRemoveRedEye />
+            View
+          </div>
+        </Menu.Item>
+      ) : null}
     </Menu>
   );
   const handleMenuClick = async (e, row) => {
@@ -138,7 +170,11 @@ const SecurityRuleList = () => {
   }, [deleteStatus]);
   return (
     <Card>
-      <SecurityRuleListHeader showDrawer={showDrawer} setIsAdd={setAddOrEdit} />
+      <SecurityRuleListHeader
+        showDrawer={showDrawer}
+        setIsAdd={setAddOrEdit}
+        permission={permission}
+      />
       <PaginatedDataGrid
         columns={columns}
         fetchData={fetchData}

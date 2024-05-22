@@ -5,7 +5,7 @@ import PermittedButton from "../../../components/PermittedButton/PermittedButton
 
 const { Title } = Typography;
 
-const SecurityRuleListHeader = ({ showDrawer, setIsAdd, permission }) => {
+const CompanyListHeader = ({ showDrawer, setIsAdd, permission }) => {
   const handleClick = (e) => {
     e.preventDefault();
     showDrawer();
@@ -13,10 +13,10 @@ const SecurityRuleListHeader = ({ showDrawer, setIsAdd, permission }) => {
   };
   return (
     <div className="w-full flex items-center justify-between mb-5">
-      <Title level={5}>Security Rule List</Title>
+      <Title level={5}>Company List</Title>
       <div className="flex items-center flex-col lg:flex-row">
         <PermittedButton
-          text="Add Security Rule"
+          text="Add Company"
           type="primary"
           icon={<MdAdd />}
           handleClick={handleClick}
@@ -28,4 +28,4 @@ const SecurityRuleListHeader = ({ showDrawer, setIsAdd, permission }) => {
   );
 };
 
-export default SecurityRuleListHeader;
+export default CompanyListHeader;

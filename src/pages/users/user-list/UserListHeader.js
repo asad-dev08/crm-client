@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Typography } from "antd";
 import { MdAdd } from "react-icons/md";
-import PermittedButton from "../../../components/PermittedButton.js/PermittedButton.tsx";
+import PermittedButton from "../../../components/PermittedButton/PermittedButton.tsx";
 
 const { Title } = Typography;
 

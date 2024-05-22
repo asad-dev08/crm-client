@@ -3,14 +3,26 @@ import { Button, Calendar, Card, Typography } from "antd";
 import CreateEvent from "./CreateEvent";
 import moment from "moment";
 import { hexToRGBA } from "../../components/theme/ThemeProvider";
+import { useSelector } from "react-redux";
+import { getPermissionsForMenu } from "../../util/helper";
+import PermittedButton from "../../components/PermittedButton/PermittedButton.tsx";
+import { useLocation } from "react-router-dom";
+import { MdAdd } from "react-icons/md";
 
 const { Text } = Typography;
 
 const EventCalendar = () => {
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [selectedCell, setSelectedCell] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventList, setEventList] = useState([]);
+  const menus = useSelector((state) => state.auth.menus);
+
+  const permission = getPermissionsForMenu(
+    menus,
+    location && location.pathname
+  );
 
   const onClose = () => {
     setOpen(false);
@@ -41,10 +53,23 @@ const EventCalendar = () => {
   const AddNewEvent = (event) => {
     setEventList([...eventList, event]);
   };
+  const isDateBetween = (startDate, endDate, val) => {
+    const start = moment(startDate, "YYYY-MM-DD");
+    const end = moment(endDate, "YYYY-MM-DD");
+    const checkDate = moment(val, "YYYY-MM-DD");
 
+    return start.isSameOrBefore(checkDate) && checkDate.isSameOrBefore(end);
+  };
   const dateCellRender = (value) => {
     const val = value.format("YYYY-MM-DD");
-    const data = eventList.filter((x) => x.date == val);
+    const data = eventList.filter((x) => {
+      const startDate = moment(x.start_date, "YYYY-MM-DD");
+      const endDate = moment(x.end_date, "YYYY-MM-DD");
+      const isBetween = isDateBetween(startDate, endDate, val);
+
+      return isBetween;
+    });
+
     return (
       <>
         {data &&
@@ -111,9 +136,14 @@ const EventCalendar = () => {
               Upcoming Events
             </Typography>
 
-            <Button type="primary" onClick={handleAddButtonClick}>
-              Add Event
-            </Button>
+            <PermittedButton
+              text="Add Event"
+              type="primary"
+              icon={<MdAdd />}
+              handleClick={handleAddButtonClick}
+              permission={permission}
+              permissionType="add"
+            />
           </div>
           <div className="my-4 max-h-[calc(100vh-200px)] overflow-y-auto">
             {eventList.map((ev) => (
@@ -156,6 +186,7 @@ const EventCalendar = () => {
           onClose={onClose}
           open={open}
           data={selectedCell}
+          selectedCell={selectedCell}
           selectedDate={selectedDate}
           isAdd={true}
           AddNewEvent={AddNewEvent}

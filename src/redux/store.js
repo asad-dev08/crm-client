@@ -8,6 +8,8 @@ import authReducer from "./auth/authSlice";
 import menuReducer from "./menu/menuSlice";
 import securityRuleReducer from "./security-rule/securityRuleSlice";
 import securityGroupReducer from "./security-group/securityGroupSlice";
+import companyReducer from "./company/companySlice";
+
 import logger from "redux-logger";
 
 const store = configureStore({
@@ -19,6 +21,7 @@ const store = configureStore({
     menu: menuReducer,
     securityRule: securityRuleReducer,
     securityGroup: securityGroupReducer,
+    company: companyReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

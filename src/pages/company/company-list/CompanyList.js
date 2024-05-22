@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PaginatedDataGrid from "../../../components/theme/global/datagrid/PaginatedDataGrid";
-import SecurityGroupListHeader from "./SecurityGroupListHeader";
+import CompanyListHeader from "./CompanyListHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  deleteSecurityGroup,
-  getSecurityGroup,
-  getSecurityGroupsWithPagination,
-} from "../../../redux/security-group/securityGroupSlice";
-import { Button, Card, Dropdown, Menu, Modal } from "antd";
+  deleteCompany,
+  getCompany,
+  getCompanysWithPagination,
+} from "../../../redux/company/companySlice";
+import { Button, Dropdown, Menu, Modal } from "antd";
 import {
   MdDeleteOutline,
   MdMoreVert,
@@ -16,14 +16,14 @@ import {
   MdOutlineRemoveRedEye,
 } from "react-icons/md";
 import toast from "react-hot-toast";
-import { getMenus } from "../../../redux/menu/menuSlice";
-import CreateSecurityGroup from "../create-group-group/CreateSecurityGroup";
 import { getPermissionsForMenu } from "../../../util/helper";
+import { EyeOutlined } from "@ant-design/icons";
+import CreateCompany from "../create-company/CreateCompany";
 
-const SecurityGroupList = () => {
+const CompanyList = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [deleteStatus, setDeleteStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
@@ -77,7 +77,7 @@ const SecurityGroupList = () => {
   );
   const handleMenuClick = async (e, row) => {
     if (e.key === "edit") {
-      const response = await dispatch(getSecurityGroup(row.id));
+      const response = await dispatch(getCompany(row.id));
       const data =
         (await response) && response.payload && response.payload.data;
       setSelectedRow(data);
@@ -92,9 +92,9 @@ const SecurityGroupList = () => {
   };
   const handleDeleteModalOk = async () => {
     // Perform delete action
-    const response = await dispatch(deleteSecurityGroup(selectedRow.id));
+    const response = await dispatch(deleteCompany(selectedRow.id));
     if (response) {
-      toast.success("SecurityGroup deleted", { duration: 3000 });
+      toast.success("Company deleted", { duration: 3000 });
       setDeleteStatus(true); // Trigger data refetch
       setDeleteModalVisible(false); // Close the modal
     }
@@ -105,8 +105,9 @@ const SecurityGroupList = () => {
   };
 
   const columns = [
-    { columnName: "name", columnShow: "name" },
-    { columnName: "description", columnShow: "description" },
+    { columnName: "company_name", columnShow: "Companyname" },
+    { columnName: "phone", columnShow: "phone" },
+    { columnName: "email", columnShow: "Email" },
     {
       columnName: "actions",
       columnShow: "Actions",
@@ -125,7 +126,7 @@ const SecurityGroupList = () => {
     name: {
       textAlign: "left",
     },
-    description: {
+    email: {
       textAlign: "left",
     },
     actions: {
@@ -141,8 +142,8 @@ const SecurityGroupList = () => {
   };
   const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
-      getSecurityGroupsWithPagination({
-        tableName: "security-group",
+      getCompanysWithPagination({
+        tableName: "companies",
         page: page,
         pageSize: pageSize,
       })
@@ -153,6 +154,7 @@ const SecurityGroupList = () => {
       data: (data && data.rows) || [],
 
       total: (data && data.total.total) || 0,
+      // totalPages: (data && Math.ceil(data.total.total / rowsPerPage)) || 0,
     };
   };
   useEffect(() => {
@@ -162,8 +164,8 @@ const SecurityGroupList = () => {
     }
   }, [deleteStatus]);
   return (
-    <Card>
-      <SecurityGroupListHeader
+    <div>
+      <CompanyListHeader
         showDrawer={showDrawer}
         setIsAdd={setAddOrEdit}
         permission={permission}
@@ -175,7 +177,7 @@ const SecurityGroupList = () => {
         dataManipulator={manipulateData}
       />
       {open && (
-        <CreateSecurityGroup
+        <CreateCompany
           onClose={onClose}
           open={open}
           data={selectedRow}
@@ -189,10 +191,10 @@ const SecurityGroupList = () => {
         onCancel={handleDeleteModalCancel}
         maskClosable={false}
       >
-        <p>Are you sure you want to delete this security group?</p>
+        <p>Are you sure you want to delete this company?</p>
       </Modal>
-    </Card>
+    </div>
   );
 };
 
-export default SecurityGroupList;
+export default CompanyList;

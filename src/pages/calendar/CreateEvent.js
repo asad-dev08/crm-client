@@ -8,6 +8,7 @@ import {
   Space,
   Typography,
 } from "antd";
+import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
 
@@ -15,6 +16,7 @@ const CreateEvent = ({
   onClose,
   open,
   data,
+  selectedCell,
   selectedDate,
   isAdd,
   AddNewEvent,
@@ -28,9 +30,8 @@ const CreateEvent = ({
   const onFinish = async (values) => {
     const model = {
       title: values.title,
-      date: selectedDate
-        ? moment(selectedDate).format("YYYY-MM-DD")
-        : values.date.format("YYYY-MM-DD"),
+      start_date: values.start_date.format("YYYY-MM-DD"),
+      end_date: values.end_date.format("YYYY-MM-DD"),
       description: values.description,
       color: values.color,
       id: isAdd ? 0 : data.id,
@@ -120,7 +121,10 @@ const CreateEvent = ({
         initialValues={{
           id: (data && data.id) || 0,
           title: (data && data.title) || "",
-          date: (data && data.date) || "",
+          start_date: !data.start_date
+            ? dayjs(selectedCell)
+            : dayjs(data.start_date),
+          end_date: !data.end_date ? dayjs(selectedCell) : dayjs(data.end_date),
           description: (data && data.description) || "",
           color: (data && data.color) || "#1677ff",
         }}
@@ -138,24 +142,36 @@ const CreateEvent = ({
         >
           <Input placeholder="Enter Event Title" />
         </Form.Item>
-        {!selectedDate ? (
-          <Form.Item
-            name="date"
-            label="Event Date"
-            rules={[
-              {
-                required: true,
-                message: "Enter Event Date",
-              },
-            ]}
-          >
-            <DatePicker defaultValue={selectedDate} />
-          </Form.Item>
-        ) : (
+        {/* {!selectedDate ? ( */}
+        <Form.Item
+          name="start_date"
+          label="Event Start Date"
+          rules={[
+            {
+              required: true,
+              message: "Enter Event Start Date",
+            },
+          ]}
+        >
+          <DatePicker defaultValue={dayjs(selectedDate)} className="w-full" />
+        </Form.Item>
+        <Form.Item
+          name="end_date"
+          label="Event End Date"
+          rules={[
+            {
+              required: true,
+              message: "Enter Event End Date",
+            },
+          ]}
+        >
+          <DatePicker defaultValue={dayjs(selectedDate)} className="w-full" />
+        </Form.Item>
+        {/* ) : (
           <Form.Item name="date" label="Event Date">
             <Typography>{selectedDate}</Typography>
           </Form.Item>
-        )}
+        )} */}
         <Form.Item name="description" label="Event Description">
           <Input.TextArea rows={3} placeholder="Enter Event Description" />
         </Form.Item>

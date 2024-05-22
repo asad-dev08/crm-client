@@ -15,6 +15,7 @@ import ErrorPage from "../pages/error/ErrorPage";
 import { useAuth } from "../hooks/useAuth";
 import GlobalLayout from "../components/theme/global/GlobalLayout";
 import { useEffect, useState } from "react";
+import CompanyList from "../pages/company/company-list/CompanyList";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -49,6 +50,11 @@ const AppRoutes = () => {
           path: "/security-group/security-group-list",
           element: <SecurityGroupList />,
         },
+
+        {
+          path: "/company",
+          element: <CompanyList />,
+        },
         {
           path: "/*",
           element: <ErrorPage />,
@@ -65,12 +71,20 @@ const AppRoutes = () => {
     },
   ];
 
+  const routesForFirstTime = [
+    {
+      path: "/company-setup",
+      element: <CompanyList />,
+    },
+  ];
+
   // Combine and conditionally include routes based on authentication status
   useEffect(() => {
     const routes = createBrowserRouter([
       ...routesForPublic,
       ...(!token ? routesForNotAuthenticatedOnly : []),
       ...routesForAuthenticatedOnly,
+      ...routesForFirstTime,
     ]);
     setRouter(routes);
   }, [token]);

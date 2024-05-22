@@ -1,10 +1,11 @@
 import React from "react";
 import { Button, Typography } from "antd";
 import { MdAdd } from "react-icons/md";
+import PermittedButton from "../../../components/PermittedButton/PermittedButton.tsx";
 
 const { Title } = Typography;
 
-const SecurityGroupistHeader = ({ showDrawer, setIsAdd }) => {
+const SecurityGroupistHeader = ({ showDrawer, setIsAdd, permission }) => {
   const handleClick = (e) => {
     e.preventDefault();
     showDrawer();
@@ -14,14 +15,14 @@ const SecurityGroupistHeader = ({ showDrawer, setIsAdd }) => {
     <div className="w-full flex items-center justify-between mb-5">
       <Title level={5}>Security Group List</Title>
       <div className="flex items-center flex-col lg:flex-row">
-        <Button
+        <PermittedButton
+          text="Add Security Group"
           type="primary"
           icon={<MdAdd />}
-          className="flex items-center"
-          onClick={handleClick}
-        >
-          Add Security Group
-        </Button>
+          handleClick={handleClick}
+          permission={permission}
+          permissionType="add"
+        />
       </div>
     </div>
   );

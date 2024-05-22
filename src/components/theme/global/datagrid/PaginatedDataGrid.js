@@ -78,6 +78,7 @@ const PaginatedDataGrid = ({
           onChange={handlePageChange}
           defaultCurrent={currentPage}
           total={totalItems}
+          pageSizeOptions={[5, 10, 20, 50, 100]}
         />
       </div>
     </div>
