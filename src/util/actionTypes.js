@@ -12,6 +12,7 @@ export const USER_PAGINATION_CONTROLLER = "user-pagination";
 
 export const USER_CONTROLLER = "user";
 export const COMPANY_CONTROLLER = "company";
+export const EVENT_CALENDAR_CONTROLLER = "event-calendar";
 export const MENU_CONTROLLER = "menu";
 export const SECURITY_RULE_CONTROLLER = "security-rule";
 export const SECURITY_GROUP_CONTROLLER = "security-group";

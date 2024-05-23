@@ -11,6 +11,12 @@ import {
 import dayjs from "dayjs";
 import moment from "moment";
 import React, { useState } from "react";
+import {
+  saveEventCalendar,
+  updateEventCalendar,
+} from "../../redux/event-calendar/eventCalendarSlice";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 const CreateEvent = ({
   onClose,
@@ -21,6 +27,7 @@ const CreateEvent = ({
   isAdd,
   AddNewEvent,
 }) => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const handleSaveClick = (e) => {
     e.preventDefault();
@@ -36,47 +43,46 @@ const CreateEvent = ({
       color: values.color,
       id: isAdd ? 0 : data.id,
     };
-    AddNewEvent(model);
-    // try {
-    //   if (isAdd) {
-    //     await dispatch(saveUser(model))
-    //       .then((response) => {
-    //         if (
-    //           response &&
-    //           response.payload &&
-    //           response.payload.statusCode === 201
-    //         ) {
-    //           toast.success(
-    //             response && response.payload && response.payload.message,
-    //             { duration: 3000 }
-    //           );
-    //           form.resetFields();
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error submitting form:", error);
-    //         toast.error(error, { duration: 3000 });
-    //       });
-    //   } else {
-    //     await dispatch(updateUser(model))
-    //       .then((response) => {
-    //         if (
-    //           response &&
-    //           response.payload &&
-    //           response.payload.statusCode === 200
-    //         ) {
-    //           toast.success(
-    //             response && response.payload && response.payload.message,
-    //             { duration: 3000 }
-    //           );
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error submitting form:", error);
-    //         toast.error(error, { duration: 3000 });
-    //       });
-    //   }
-    // } catch (error) {}
+    try {
+      if (isAdd) {
+        await dispatch(saveEventCalendar(model))
+          .then((response) => {
+            if (
+              response &&
+              response.payload &&
+              response.payload.statusCode === 201
+            ) {
+              toast.success(
+                response && response.payload && response.payload.message,
+                { duration: 3000 }
+              );
+              form.resetFields();
+            }
+          })
+          .catch((error) => {
+            console.error("Error submitting form:", error);
+            toast.error(error, { duration: 3000 });
+          });
+      } else {
+        await dispatch(updateEventCalendar(model))
+          .then((response) => {
+            if (
+              response &&
+              response.payload &&
+              response.payload.statusCode === 200
+            ) {
+              toast.success(
+                response && response.payload && response.payload.message,
+                { duration: 3000 }
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error submitting form:", error);
+            toast.error(error, { duration: 3000 });
+          });
+      }
+    } catch (error) {}
   };
   const formItemLayout = {
     labelCol: {

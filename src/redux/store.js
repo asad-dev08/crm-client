@@ -9,6 +9,7 @@ import menuReducer from "./menu/menuSlice";
 import securityRuleReducer from "./security-rule/securityRuleSlice";
 import securityGroupReducer from "./security-group/securityGroupSlice";
 import companyReducer from "./company/companySlice";
+import eventCalendarReducer from "./event-calendar/eventCalendarSlice";
 
 import logger from "redux-logger";
 
@@ -22,6 +23,7 @@ const store = configureStore({
     securityRule: securityRuleReducer,
     securityGroup: securityGroupReducer,
     company: companyReducer,
+    eventCalendar: eventCalendarReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

@@ -1,28 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Calendar, Card, Typography } from "antd";
 import CreateEvent from "./CreateEvent";
 import moment from "moment";
 import { hexToRGBA } from "../../components/theme/ThemeProvider";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getPermissionsForMenu } from "../../util/helper";
 import PermittedButton from "../../components/PermittedButton/PermittedButton.tsx";
 import { useLocation } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
+import {
+  getEventCalendars,
+  saveEventCalendar,
+  updateEventCalendar,
+} from "../../redux/event-calendar/eventCalendarSlice.js";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
 
 const EventCalendar = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [selectedCell, setSelectedCell] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [eventList, setEventList] = useState([]);
   const menus = useSelector((state) => state.auth.menus);
+  const eventList = useSelector((state) => state.eventCalendar.eventCalendars);
 
   const permission = getPermissionsForMenu(
     menus,
     location && location.pathname
   );
+
+  useEffect(() => {
+    dispatch(getEventCalendars());
+  }, [open]);
 
   const onClose = () => {
     setOpen(false);
@@ -43,16 +54,14 @@ const EventCalendar = () => {
     setSelectedCell(val);
     setSelectedDate(moment(val).format("YYYY-MM-DD"));
   };
-
+  const [isFromButton, setIsFromButton] = useState(false);
   const handleAddButtonClick = () => {
     setOpen(true);
     setSelectedCell(null);
     setSelectedDate(null);
+    setIsFromButton(true);
   };
 
-  const AddNewEvent = (event) => {
-    setEventList([...eventList, event]);
-  };
   const isDateBetween = (startDate, endDate, val) => {
     const start = moment(startDate, "YYYY-MM-DD");
     const end = moment(endDate, "YYYY-MM-DD");
@@ -85,6 +94,8 @@ const EventCalendar = () => {
                 setSelectedCell(item);
                 setSelectedDate(value.format("YYYY-MM-DD"));
                 setOpen(true);
+
+                setIsFromButton(false);
               }}
             >
               <div className="flex-[.1] flex items-center justify-center">
@@ -185,11 +196,11 @@ const EventCalendar = () => {
         <CreateEvent
           onClose={onClose}
           open={open}
-          data={selectedCell}
-          selectedCell={selectedCell}
+          data={isFromButton ? dayjs(new Date()) : selectedCell}
+          selectedCell={isFromButton ? dayjs(new Date()) : selectedCell}
           selectedDate={selectedDate}
           isAdd={true}
-          AddNewEvent={AddNewEvent}
+          // AddNewEvent={AddNewEvent}
         />
       )}
     </>
