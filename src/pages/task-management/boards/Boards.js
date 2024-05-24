@@ -72,7 +72,7 @@ const Boards = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center justify-end mt-5">
+      <div className="flex items-center justify-end">
         <PermittedButton
           text="Create New Board"
           type="primary"

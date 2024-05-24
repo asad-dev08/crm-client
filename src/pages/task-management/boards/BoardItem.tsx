@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { cn } from "../../../util/cn.ts";
 import { IconClipboardList } from "@tabler/icons-react";
 import { MdDeleteOutline } from "react-icons/md";
-import { Modal } from "antd";
+import { Card, Modal } from "antd";
 
 export const BoardItem = ({
   id,
@@ -56,9 +56,10 @@ export const BoardItem = ({
   };
   return (
     <>
-      <div
+      <Card
+        bodyStyle={{ padding: 0 }}
         className={cn(
-          "row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4  bg-white border border-transparent justify-between flex flex-col items-start space-y-4 hover:cursor-pointer hover:bg-slate-50 relative",
+          " row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4  border border-transparent justify-between flex flex-col items-start space-y-4 hover:cursor-pointer  relative",
           className
         )}
         onClick={(e) => {
@@ -80,21 +81,21 @@ export const BoardItem = ({
         <div className="group-hover/bento:translate-x-2 transition duration-200 text-left flex flex-col gap-2 relative">
           {/* {icon} */}
           <IconClipboardList />
-          <div className="font-bold text-black mb-2 mt-2">{title}</div>
+          <div className="font-bold  mb-2 mt-2">{title}</div>
           <div className="font-normal text-xs text-slate-700">
             {description}
           </div>
           <div>
             <span className="text-xs font-semibold ">Columns: </span>
             {columns.map((item, i) => (
-              <span key={i} className="text-xs font-semibold uppercase">
+              <span key={i} className="text-xs font-semibold uppercase ">
                 {item}
                 {i < columns.length - 1 && ", "}
               </span>
             ))}
           </div>
         </div>
-      </div>
+      </Card>
       <Modal
         className="z-[9999]"
         title="Confirm Delete"
