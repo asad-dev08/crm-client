@@ -135,7 +135,7 @@ const GlobalLayout = () => {
           />
         </Card>
         <Content style={{ margin: "70px 8px 0", overflow: "auto" }}>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center" }} className="p-2">
             <Outlet />
           </div>
         </Content>

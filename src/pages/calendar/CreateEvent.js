@@ -128,9 +128,9 @@ const CreateEvent = ({
           id: (data && data.id) || 0,
           title: (data && data.title) || "",
           start_date: !data.start_date
-            ? dayjs(selectedCell)
+            ? dayjs(selectedDate)
             : dayjs(data.start_date),
-          end_date: !data.end_date ? dayjs(selectedCell) : dayjs(data.end_date),
+          end_date: !data.end_date ? dayjs(selectedDate) : dayjs(data.end_date),
           description: (data && data.description) || "",
           color: (data && data.color) || "#1677ff",
         }}

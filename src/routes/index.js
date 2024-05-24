@@ -16,6 +16,7 @@ import { useAuth } from "../hooks/useAuth";
 import GlobalLayout from "../components/theme/global/GlobalLayout";
 import { useEffect, useState } from "react";
 import CompanyList from "../pages/company/company-list/CompanyList";
+import Boards from "../pages/task-management/boards/Boards";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -54,6 +55,10 @@ const AppRoutes = () => {
         {
           path: "/company",
           element: <CompanyList />,
+        },
+        {
+          path: "/task-management/boards",
+          element: <Boards />,
         },
         {
           path: "/*",

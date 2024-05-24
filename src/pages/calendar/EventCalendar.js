@@ -25,6 +25,7 @@ const EventCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const menus = useSelector((state) => state.auth.menus);
   const eventList = useSelector((state) => state.eventCalendar.eventCalendars);
+  const [isAdd, setIsAdd] = useState(true);
 
   const permission = getPermissionsForMenu(
     menus,
@@ -58,8 +59,9 @@ const EventCalendar = () => {
   const handleAddButtonClick = () => {
     setOpen(true);
     setSelectedCell(null);
-    setSelectedDate(null);
+    setSelectedDate(moment(new Date()).format("YYYY-MM-DD"));
     setIsFromButton(true);
+    setIsAdd(true);
   };
 
   const isDateBetween = (startDate, endDate, val) => {
@@ -94,6 +96,7 @@ const EventCalendar = () => {
                 setSelectedCell(item);
                 setSelectedDate(value.format("YYYY-MM-DD"));
                 setOpen(true);
+                setIsAdd(false);
 
                 setIsFromButton(false);
               }}
@@ -199,7 +202,7 @@ const EventCalendar = () => {
           data={isFromButton ? dayjs(new Date()) : selectedCell}
           selectedCell={isFromButton ? dayjs(new Date()) : selectedCell}
           selectedDate={selectedDate}
-          isAdd={true}
+          isAdd={isAdd}
           // AddNewEvent={AddNewEvent}
         />
       )}
