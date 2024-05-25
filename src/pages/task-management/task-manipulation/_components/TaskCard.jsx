@@ -110,10 +110,10 @@ export const TaskCard = ({
               {description}
             </div>
             <div className="w-full flex flex-col gap-2">
-              <label className="font-semibold text-xs text-slate-800">
+              <label className="font-semibold text-xs text-slate-500">
                 Assigned to: {username}
               </label>
-              <label className="font-semibold text-xs text-slate-800">
+              <label className="font-semibold text-xs text-slate-500">
                 Target date:{" "}
                 {moment(target_date).format("YYYY-MM-DD HH:mm:ss A")}
               </label>
