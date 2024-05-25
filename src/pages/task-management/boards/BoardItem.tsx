@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { cn } from "../../../util/cn.ts";
 import { IconClipboardList } from "@tabler/icons-react";
-import { MdDeleteOutline } from "react-icons/md";
-import { Card, Modal } from "antd";
+import {
+  MdDeleteOutline,
+  MdEdit,
+  MdMoreVert,
+  MdOutlineRemoveRedEye,
+} from "react-icons/md";
+import { Button, Card, Dropdown, Menu, Modal } from "antd";
 
 export const BoardItem = ({
   id,
@@ -15,6 +20,7 @@ export const BoardItem = ({
   is_active,
   handleClick,
   handleDeleteBoard,
+  handleEditBoard,
 }: {
   id: string;
   className?: string;
@@ -24,8 +30,9 @@ export const BoardItem = ({
   icon?: React.ReactNode;
   columns?: any;
   is_active: boolean;
-  handleClick: (obj: any) => void;
+  handleClick: (e: any, obj: any) => void;
   handleDeleteBoard: (id: any) => void;
+  handleEditBoard: (id: any) => void;
 }) => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const showDeleteModal = (e, id) => {
@@ -44,7 +51,11 @@ export const BoardItem = ({
   const handleDeleteModalCancel = () => {
     setDeleteModalVisible(false); // Close the modal
   };
-  const handleBoardClick = () => {
+  const handleBoardClick = (e) => {
+    if (e.target.closest(".ant-dropdown")) {
+      return; // Click came from the Dropdown menu, do nothing
+    }
+    e.stopPropagation();
     const obj = {
       id,
       title,
@@ -52,35 +63,75 @@ export const BoardItem = ({
       columns,
       is_active,
     };
-    handleClick(obj);
+    handleClick(e, obj);
   };
+  const handleEdit = (e, id: any) => {
+    handleEditBoard(id);
+  };
+
+  const getMenu = (id) => (
+    <Menu onClick={(e) => handleMenuClick(e, id)}>
+      <Menu.Item key="edit">
+        <div className="flex items-center gap-2">
+          <MdEdit /> Edit
+        </div>
+      </Menu.Item>
+      <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, id)}>
+        <div className="flex items-center gap-2">
+          <MdDeleteOutline />
+          Delete
+        </div>
+      </Menu.Item>
+      <Menu.Item key="view">
+        <div className="flex items-center gap-2">
+          <MdOutlineRemoveRedEye />
+          View
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+  const handleMenuClick = async (e, item) => {
+    if (e.key === "edit") {
+      handleEdit(e, item);
+      // const response = await dispatch(getUser(row.id));
+      // const data =
+      //   (await response) && response.payload && response.payload.data;
+      // setSelectedRow(data);
+      // showDrawer();
+      // setIsAdd(false);
+    }
+  };
+
   return (
     <>
       <Card
-        bodyStyle={{ padding: 0 }}
+        bodyStyle={{ padding: 0, width: "100%" }}
         className={cn(
-          " row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4  border border-transparent justify-between flex flex-col items-start space-y-4 hover:cursor-pointer  relative",
+          "w-full row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4  border border-transparent justify-between flex flex-col items-start space-y-4 hover:cursor-pointer  relative",
           className
         )}
         onClick={(e) => {
-          e.stopPropagation();
           e.preventDefault();
-          handleBoardClick();
+          e.stopPropagation();
+          handleBoardClick(e);
         }}
       >
-        <div
-          className="absolute top-3 right-3 h-8 w-8 bg-red-100 hover:bg-red-300 text-red-700 rounded-full flex items-center justify-center"
-          onClick={(e) => {
-            e.stopPropagation();
-            showDeleteModal(e, id);
-          }}
-        >
-          <MdDeleteOutline className="size-4" />
-        </div>
         {/* {header} */}
-        <div className="group-hover/bento:translate-x-2 transition duration-200 text-left flex flex-col gap-2 relative">
+        <div className="group-hover/bento:translate-x-1 transition duration-200 text-left flex flex-col gap-2 relative">
           {/* {icon} */}
-          <IconClipboardList />
+          <div className="w-full flex items-center justify-between z-10">
+            <IconClipboardList />
+            <Dropdown
+              overlay={getMenu(id)}
+              placement="bottomRight"
+              trigger={["click"]}
+            >
+              <Button
+                onClick={(e) => e.stopPropagation()}
+                icon={<MdMoreVert />}
+              />
+            </Dropdown>
+          </div>
           <div className="font-bold  mb-2 mt-2">{title}</div>
           <div className="font-normal text-xs text-slate-700">
             {description}

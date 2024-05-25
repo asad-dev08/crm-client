@@ -17,7 +17,7 @@ const CreateBoard = ({ isAdd, isOpen, handleModalClose, data, handleAdd }) => {
       id: isAdd ? "" : data.id,
       columns: columns || [],
     };
-    console.log(model);
+
     handleAdd(model);
     handleModalClose();
     // try {

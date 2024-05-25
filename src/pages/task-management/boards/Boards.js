@@ -5,7 +5,7 @@ import PermittedButton from "../../../components/PermittedButton/PermittedButton
 import { MdAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { getPermissionsForMenu } from "../../../util/helper.js";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Modal } from "antd";
 import CreateBoard from "../create-board/CreateBoard.js";
 
@@ -34,6 +34,7 @@ const boardItems = [
 ];
 
 const Boards = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [boardList, setBoardList] = useState(boardItems);
@@ -64,10 +65,24 @@ const Boards = () => {
     setBoardList(newList);
   };
 
-  const handleClick = (board) => {
+  const handleEditBoard = (id) => {
+    const board = boardList.find((x) => x.id === id);
     setIsAdd(false);
     setSelectedBoard(board);
     setIsOpen(true);
+  };
+
+  const handleClickToEditBoard = (e, board) => {
+    e.stopPropagation();
+    console.log(board);
+    navigate(`/task-management/task-manipulation/${board.id}`, {
+      replace: true,
+      state: {
+        boardId: board.id,
+        board: board,
+        permission: permission,
+      },
+    });
   };
 
   return (
@@ -86,14 +101,16 @@ const Boards = () => {
         {boardList.map((board, index) => (
           <BoardItem
             key={index}
+            id={board.id}
             title={board.title}
             description={board.description}
             header={board.header}
             icon={board.icon}
             columns={board.columns}
             is_active={board.is_active}
-            handleClick={handleClick}
+            handleClick={handleClickToEditBoard}
             handleDeleteBoard={handleDeleteBoard}
+            handleEditBoard={handleEditBoard}
           />
         ))}
       </div>

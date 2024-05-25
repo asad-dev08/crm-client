@@ -34,7 +34,6 @@ const Login = () => {
                 res.payload.menus.length > 0 &&
                 res.payload.menus[0].url) ||
               undefined;
-            console.log("first: ", firstMenu);
             toast.success("Logged in", { duration: 4000 });
             if (firstMenu) navigate(firstMenu, { replace: true });
             else navigate("/error", { replace: true });

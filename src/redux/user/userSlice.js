@@ -199,7 +199,7 @@ const userSlice = createSlice({
           data.length > 0 &&
           data.map((x) => {
             return {
-              label: x.name,
+              label: x.username,
               value: x.id,
             };
           });

@@ -17,6 +17,7 @@ import GlobalLayout from "../components/theme/global/GlobalLayout";
 import { useEffect, useState } from "react";
 import CompanyList from "../pages/company/company-list/CompanyList";
 import Boards from "../pages/task-management/boards/Boards";
+import TaskManipulation from "../pages/task-management/task-manipulation/TaskManipulation";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -59,6 +60,10 @@ const AppRoutes = () => {
         {
           path: "/task-management/boards",
           element: <Boards />,
+        },
+        {
+          path: "/task-management/task-manipulation/:id",
+          element: <TaskManipulation />,
         },
         {
           path: "/*",
