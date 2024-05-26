@@ -140,7 +140,7 @@ export const BoardItem = ({
             <span className="text-xs font-semibold ">Columns: </span>
             {columns.map((item, i) => (
               <span key={i} className="text-xs font-semibold uppercase ">
-                {item}
+                {item.column_name}
                 {i < columns.length - 1 && ", "}
               </span>
             ))}

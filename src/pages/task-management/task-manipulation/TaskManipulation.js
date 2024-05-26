@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { FaFire } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -7,20 +7,28 @@ import BoardColumn from "./_components/BoardColumn";
 import { MdAdd, MdArrowBack } from "react-icons/md";
 import PermittedButton from "../../../components/PermittedButton/PermittedButton.tsx";
 import AddTask from "./_components/AddTask";
+import { useDispatch, useSelector } from "react-redux";
+import { getTaskByBoard } from "../../../redux/task-management/taskManagementSlice.js";
+import { Result } from "antd";
 
 const TaskManipulation = () => {
   const params = useParams();
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [tasks, setTasks] = useState(DEFAULT_CARDS);
   const [activeId, setActiveId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [isAdd, setIsAdd] = useState(true);
+  const tasks = useSelector((state) => state.taskManagement.tasks);
 
   const { state } = location;
   const { board, permission } = state;
   const { id } = params;
+
+  useEffect(() => {
+    dispatch(getTaskByBoard({ board_id: id }));
+  }, [id, dispatch]);
 
   const handleModalOpen = () => {
     setIsOpen(true);
@@ -29,17 +37,18 @@ const TaskManipulation = () => {
   const handleModalClose = () => {
     setIsOpen(false);
   };
-  const handleAdd = (task) => {
-    const newList = [...tasks, task];
-    setTasks(newList);
+  const handleAdd = () => {
+    dispatch(getTaskByBoard({ board_id: id }));
   };
 
   const handleBack = () => {
     navigate("/task-management/boards", { replace: true });
   };
 
+  console.log("tasks:", tasks);
+
   return (
-    <div className="h-screen w-full">
+    <div className="h-screen w-full overflow-x-auto">
       <div className="w-full flex items-center justify-between">
         <label
           className="flex items-center gap-1 hover:cursor-pointer group"
@@ -59,7 +68,11 @@ const TaskManipulation = () => {
           permissionType="add"
         />
       </div>
-      <Board board={board} tasks={tasks} setTasks={setTasks} />
+      {tasks && tasks.length > 0 ? (
+        <Board board={board} tasks={tasks} />
+      ) : (
+        <Result title="No Task Found" />
+      )}
       {isOpen && (
         <AddTask
           isOpen={isOpen}
@@ -67,30 +80,29 @@ const TaskManipulation = () => {
           isAdd={isAdd}
           handleAdd={handleAdd}
           data={selectedTask}
+          id={id}
           columns={
             board &&
             board.columns.length > 0 &&
-            board.columns.map((x) => {
-              return { label: x, value: x };
+            board.columns.map((col) => {
+              return { label: col.column_name, value: col.id };
             })
           }
-          setTasks={setTasks}
         />
       )}
     </div>
   );
 };
 
-const Board = ({ board, tasks, setTasks }) => {
+const Board = ({ board, tasks }) => {
   return (
-    <div className="my-3 w-full flex gap-3">
+    <div className="my-5 w-full flex gap-3">
       {board.columns.map((item, index) => (
         <BoardColumn
-          title={item}
-          column={item}
+          title={item.column_name}
+          column={item.column_name}
           headingColor="text-indigo-500"
           tasks={tasks}
-          setTasks={setTasks}
         />
       ))}
       {/* <BurnBarrel setTasks={setTasks} /> */}

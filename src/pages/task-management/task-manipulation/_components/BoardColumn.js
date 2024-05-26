@@ -3,7 +3,7 @@ import { TaskCard } from "./TaskCard";
 import DropIndicator from "./DropIndicator";
 import AddTask from "./AddTask";
 
-const BoardColumn = ({ title, headingColor, tasks, column, setTasks }) => {
+const BoardColumn = ({ title, headingColor, tasks, column }) => {
   const [active, setActive] = useState(false);
 
   const handleDragStart = (e, task) => {
@@ -41,7 +41,8 @@ const BoardColumn = ({ title, headingColor, tasks, column, setTasks }) => {
         copy.splice(insertAtIndex, 0, taskToTransfer);
       }
 
-      setTasks(copy);
+      //need to implement some logic here
+      //setTasks(copy);
     }
   };
 
@@ -103,13 +104,15 @@ const BoardColumn = ({ title, headingColor, tasks, column, setTasks }) => {
     setActive(false);
   };
 
-  const filteredCards = tasks.filter((c) => c.column === column);
+  const filteredCards = tasks.filter((c) => c.column_name === column);
 
   return (
     <div className="w-72 shrink-0">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className={`font-medium uppercase ${headingColor}`}>{title}</h3>
-        <span className="rounded-full text-white text-xs font-semibold bg-indigo-600 size-6 flex items-center justify-center">
+      <div className="mb-3 flex items-center justify-between bg-indigo-100 px-4 py-2 rounded-lg">
+        <h3 className={`font-medium uppercase text-xs ${headingColor}`}>
+          {title}
+        </h3>
+        <span className="rounded-full text-white text-xs font-semibold bg-indigo-500 size-6 flex items-center justify-center">
           {filteredCards.length}
         </span>
       </div>
@@ -129,7 +132,7 @@ const BoardColumn = ({ title, headingColor, tasks, column, setTasks }) => {
           );
         })}
         <DropIndicator beforeId={null} column={column} />
-        <AddTask column={column} setTasks={setTasks} />
+        {/* <AddTask column={column} /> */}
       </div>
     </div>
   );

@@ -1,13 +1,17 @@
 import { IconClipboardList } from "@tabler/icons-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BoardItem } from "./BoardItem.tsx";
 import PermittedButton from "../../../components/PermittedButton/PermittedButton.tsx";
 import { MdAdd } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getPermissionsForMenu } from "../../../util/helper.js";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Modal } from "antd";
+import { Modal, Result } from "antd";
 import CreateBoard from "../create-board/CreateBoard.js";
+import {
+  getBoards,
+  saveBoard,
+} from "../../../redux/task-management/taskManagementSlice.js";
 
 const Skeleton = () => (
   <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-slate-200 to-neutral-100"></div>
@@ -34,18 +38,23 @@ const boardItems = [
 ];
 
 const Boards = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const [boardList, setBoardList] = useState(boardItems);
+  //const [boardList, setBoardList] = useState(boardItems);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [isAdd, setIsAdd] = useState(true);
   const menus = useSelector((state) => state.auth.menus);
+  const boardList = useSelector((state) => state.taskManagement.boards);
 
   const permission = getPermissionsForMenu(
     menus,
     location && location.pathname
   );
+  useEffect(() => {
+    dispatch(getBoards());
+  }, []);
 
   const handleModalOpen = () => {
     setIsOpen(true);
@@ -55,14 +64,13 @@ const Boards = () => {
     setIsOpen(false);
   };
 
-  const handleAdd = (board) => {
-    const newList = [...boardList, board];
-    setBoardList(newList);
+  const handleAdd = () => {
+    dispatch(getBoards());
   };
 
   const handleDeleteBoard = (id) => {
     const newList = boardList.filter((x) => x.id !== id);
-    setBoardList(newList);
+    //delete
   };
 
   const handleEditBoard = (id) => {
@@ -85,6 +93,8 @@ const Boards = () => {
     });
   };
 
+  console.log("boards: ", boardList);
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-end">
@@ -97,23 +107,27 @@ const Boards = () => {
           permissionType="add"
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {boardList.map((board, index) => (
-          <BoardItem
-            key={index}
-            id={board.id}
-            title={board.title}
-            description={board.description}
-            header={board.header}
-            icon={board.icon}
-            columns={board.columns}
-            is_active={board.is_active}
-            handleClick={handleClickToEditBoard}
-            handleDeleteBoard={handleDeleteBoard}
-            handleEditBoard={handleEditBoard}
-          />
-        ))}
-      </div>
+      {boardList && boardList.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {boardList.map((board, index) => (
+            <BoardItem
+              key={index}
+              id={board.id}
+              title={board.title}
+              description={board.description}
+              header={board.header}
+              icon={board.icon}
+              columns={board.columns}
+              is_active={board.is_active}
+              handleClick={handleClickToEditBoard}
+              handleDeleteBoard={handleDeleteBoard}
+              handleEditBoard={handleEditBoard}
+            />
+          ))}
+        </div>
+      ) : (
+        <Result title="No Board Found" />
+      )}
 
       {isOpen && (
         <CreateBoard

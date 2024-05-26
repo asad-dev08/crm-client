@@ -10,6 +10,7 @@ import securityRuleReducer from "./security-rule/securityRuleSlice";
 import securityGroupReducer from "./security-group/securityGroupSlice";
 import companyReducer from "./company/companySlice";
 import eventCalendarReducer from "./event-calendar/eventCalendarSlice";
+import taskManagementReducer from "./task-management/taskManagementSlice";
 
 import logger from "redux-logger";
 
@@ -24,6 +25,7 @@ const store = configureStore({
     securityGroup: securityGroupReducer,
     company: companyReducer,
     eventCalendar: eventCalendarReducer,
+    taskManagement: taskManagementReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

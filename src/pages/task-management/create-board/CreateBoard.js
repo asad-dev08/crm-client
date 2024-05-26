@@ -6,64 +6,84 @@ import {
   MdAddCircleOutline,
   MdRemoveCircleOutline,
 } from "react-icons/md";
+import {
+  saveBoard,
+  updateBoard,
+} from "../../../redux/task-management/taskManagementSlice";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 const CreateBoard = ({ isAdd, isOpen, handleModalClose, data, handleAdd }) => {
-  const [columns, setColumns] = useState(data?.columns || [""]);
+  const dispatch = useDispatch();
+  const [columns, setColumns] = useState(
+    data?.columns || [{ column_name: "", id: "" }]
+  );
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
     const model = {
       ...values,
       id: isAdd ? "" : data.id,
-      columns: columns || [],
+      columns: columns.map((x, i) => {
+        return {
+          ...x,
+          sequence_no: i + 1,
+        };
+      }),
     };
 
-    handleAdd(model);
-    handleModalClose();
-    // try {
-    //   if (isAdd) {
-    //     await dispatch(saveUser(model))
-    //       .then((response) => {
-    //         if (
-    //           response &&
-    //           response.payload &&
-    //           response.payload.statusCode === 201
-    //         ) {
-    //           toast.success(
-    //             response && response.payload && response.payload.message,
-    //             { duration: 3000 }
-    //           );
-    //           form.resetFields();
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error submitting form:", error);
-    //         toast.error(error, { duration: 3000 });
-    //       });
-    //   } else {
-    //     await dispatch(updateUser(model))
-    //       .then((response) => {
-    //         if (
-    //           response &&
-    //           response.payload &&
-    //           response.payload.statusCode === 200
-    //         ) {
-    //           toast.success(
-    //             response && response.payload && response.payload.message,
-    //             { duration: 3000 }
-    //           );
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error submitting form:", error);
-    //         toast.error(error, { duration: 3000 });
-    //       });
-    //   }
-    // } catch (error) {}
+    try {
+      if (isAdd) {
+        await dispatch(saveBoard(model))
+          .then((response) => {
+            if (
+              response &&
+              response.payload &&
+              response.payload.statusCode === 201
+            ) {
+              toast.success(
+                response && response.payload && response.payload.message,
+                { duration: 3000 }
+              );
+              form.resetFields();
+            }
+          })
+          .catch((error) => {
+            console.error("Error submitting form:", error);
+            toast.error(error, { duration: 3000 });
+          });
+      } else {
+        await dispatch(updateBoard(model))
+          .then((response) => {
+            if (
+              response &&
+              response.payload &&
+              response.payload.statusCode === 200
+            ) {
+              toast.success(
+                response && response.payload && response.payload.message,
+                { duration: 3000 }
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error submitting form:", error);
+            toast.error(error, { duration: 3000 });
+          });
+      }
+    } catch (error) {
+    } finally {
+      handleAdd();
+      handleModalClose();
+    }
   };
 
   const addColumn = () => {
-    setColumns([...columns, ""]);
+    const newColumn = {
+      id: "",
+      column_name: "",
+    };
+    setColumns([...columns, newColumn]);
   };
 
   const removeColumn = (index) => {
@@ -72,7 +92,7 @@ const CreateBoard = ({ isAdd, isOpen, handleModalClose, data, handleAdd }) => {
 
   const handleColumnChange = (value, index) => {
     const newColumns = [...columns];
-    newColumns[index] = value;
+    newColumns[index].column_name = value;
     setColumns(newColumns);
   };
 
@@ -139,7 +159,7 @@ const CreateBoard = ({ isAdd, isOpen, handleModalClose, data, handleAdd }) => {
                 }}
               >
                 <Input
-                  value={column}
+                  value={column.column_name}
                   onChange={(e) => handleColumnChange(e.target.value, index)}
                   style={{ marginRight: 8 }}
                 />
