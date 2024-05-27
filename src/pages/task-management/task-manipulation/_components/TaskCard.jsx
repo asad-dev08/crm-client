@@ -11,11 +11,18 @@ import {
   MdTask,
 } from "react-icons/md";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import {
+  deleteTask,
+  getTaskByBoard,
+} from "../../../../redux/task-management/taskManagementSlice.js";
+import toast from "react-hot-toast";
+import AddTask from "./AddTask.js";
 
 export const TaskCard = ({
   title,
   id,
-  column,
+  column_name,
   handleDragStart,
   className,
   icon,
@@ -23,19 +30,26 @@ export const TaskCard = ({
   is_active,
   username,
   target_date,
+  taskCount,
+  board_id,
+  columns,
+  user_id,
+  column_id,
+  task_users,
 }) => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isView, setIsView] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  const dispatch = useDispatch();
   const showDeleteModal = (e, id) => {
     setDeleteModalVisible(true);
   };
   const handleDeleteModalOk = async () => {
-    // Perform delete action
-    // const response = await dispatch(deleteUser(selectedRow.id));
-    // if (response) {
-    //   toast.success("User deleted", { duration: 3000 });
-    //   setDeleteStatus(true); // Trigger data refetch
-    //   setDeleteModalVisible(false); // Close the modal
-    // }
+    dispatch(deleteTask({ id: id, board_id: board_id })).then(() => {
+      toast.success("Task deleted", { duration: 3000 });
+      dispatch(getTaskByBoard({ board_id: board_id }));
+    });
   };
 
   const handleDeleteModalCancel = () => {
@@ -64,24 +78,32 @@ export const TaskCard = ({
   );
   const handleMenuClick = async (e, item) => {
     if (e.key === "edit") {
-      //handleEdit(e, item);
-      // const response = await dispatch(getUser(row.id));
-      // const data =
-      //   (await response) && response.payload && response.payload.data;
-      // setSelectedRow(data);
-      // showDrawer();
-      // setIsAdd(false);
+      setIsEdit(true);
+      setIsView(false);
+    } else if (e.key === "view") {
+      handleView();
     }
   };
+  const handleModalClose = () => {
+    setIsEdit(false);
+  };
+  const handleAdd = () => {
+    dispatch(getTaskByBoard({ board_id: board_id }));
+  };
+  const handleView = () => {
+    setIsView(true);
+    setIsEdit(true);
+  };
+
   return (
     <>
-      <DropIndicator beforeId={id} column={column} />
+      <DropIndicator beforeId={id} column={column_name} taskCount={taskCount} />
       <motion.div>
         <Card
           layout
           layoutId={id}
           draggable="true"
-          onDragStart={(e) => handleDragStart(e, { title, id, column })}
+          onDragStart={(e) => handleDragStart(e, { title, id, column_name })}
           bodyStyle={{ padding: 0, width: "100%" }}
           className={cn(
             "w-full mb-3 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4  border border-transparent justify-between flex flex-col items-start space-y-4 cursor-grab relative",
@@ -140,6 +162,41 @@ export const TaskCard = ({
           <p>Are you sure you want to delete this task?</p>
         </Modal>
       </motion.div>
+
+      {isEdit && (
+        <AddTask
+          isOpen={isEdit}
+          handleModalClose={handleModalClose}
+          isAdd={false}
+          isView={isView}
+          handleAdd={handleAdd}
+          data={{
+            title,
+            id,
+            column_name,
+            column: column_id,
+            handleDragStart,
+            className,
+            icon,
+            description,
+            user_id,
+            is_active,
+            username,
+            target_date,
+            taskCount,
+            board_id,
+            target_date,
+          }}
+          board_id={board_id}
+          task_users={task_users}
+          columns={
+            columns.length > 0 &&
+            columns.map((col) => {
+              return { label: col.column_name, value: col.id };
+            })
+          }
+        />
+      )}
     </>
   );
 };

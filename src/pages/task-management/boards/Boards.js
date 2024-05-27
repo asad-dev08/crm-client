@@ -9,33 +9,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Modal, Result } from "antd";
 import CreateBoard from "../create-board/CreateBoard.js";
 import {
+  deleteBoard,
   getBoards,
   saveBoard,
 } from "../../../redux/task-management/taskManagementSlice.js";
+import toast from "react-hot-toast";
 
 const Skeleton = () => (
   <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-slate-200 to-neutral-100"></div>
 );
-
-const boardItems = [
-  {
-    id: 1,
-    title: "Board 1",
-    description: "This is a description of board 1",
-    header: <Skeleton />,
-    icon: <IconClipboardList />,
-    columns: ["todo", "in progress", "done"],
-  },
-  {
-    id: 2,
-    title: "Board 2",
-    description:
-      "This is a description of board 2This is a description of board 2This is a description of board 2",
-    header: <Skeleton />,
-    icon: <IconClipboardList />,
-    columns: ["todo", "in progress", "qa", "done"],
-  },
-];
 
 const Boards = () => {
   const dispatch = useDispatch();
@@ -47,6 +29,7 @@ const Boards = () => {
   const [isAdd, setIsAdd] = useState(true);
   const menus = useSelector((state) => state.auth.menus);
   const boardList = useSelector((state) => state.taskManagement.boards);
+  const [isView, setIsView] = useState(false);
 
   const permission = getPermissionsForMenu(
     menus,
@@ -69,8 +52,10 @@ const Boards = () => {
   };
 
   const handleDeleteBoard = (id) => {
-    const newList = boardList.filter((x) => x.id !== id);
-    //delete
+    dispatch(deleteBoard(id)).then(() => {
+      toast.success("Board deleted", { duration: 3000 });
+      dispatch(getBoards());
+    });
   };
 
   const handleEditBoard = (id) => {
@@ -78,11 +63,19 @@ const Boards = () => {
     setIsAdd(false);
     setSelectedBoard(board);
     setIsOpen(true);
+    setIsView(false);
+  };
+  const handleViewBoard = (id) => {
+    const board = boardList.find((x) => x.id === id);
+    setIsAdd(false);
+    setSelectedBoard(board);
+    setIsOpen(true);
+    setIsView(true);
   };
 
   const handleClickToEditBoard = (e, board) => {
     e.stopPropagation();
-    console.log(board);
+
     navigate(`/task-management/task-manipulation/${board.id}`, {
       replace: true,
       state: {
@@ -92,8 +85,6 @@ const Boards = () => {
       },
     });
   };
-
-  console.log("boards: ", boardList);
 
   return (
     <div className="flex flex-col gap-5">
@@ -122,6 +113,7 @@ const Boards = () => {
               handleClick={handleClickToEditBoard}
               handleDeleteBoard={handleDeleteBoard}
               handleEditBoard={handleEditBoard}
+              handleViewBoard={handleViewBoard}
             />
           ))}
         </div>
@@ -134,6 +126,7 @@ const Boards = () => {
           isOpen={isOpen}
           handleModalClose={handleModalClose}
           isAdd={isAdd}
+          isView={isView}
           handleAdd={handleAdd}
           data={selectedBoard}
         />

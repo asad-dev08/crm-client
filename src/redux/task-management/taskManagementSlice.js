@@ -280,11 +280,11 @@ export const getTask = createAsyncThunk(
 );
 export const deleteTask = createAsyncThunk(
   "taskManagement/deleteTask",
-  async (id, { rejectWithValue }) => {
+  async (obj, { rejectWithValue }) => {
     try {
       const response = await makeApiCall(
         "delete",
-        `/${TASK_MANAGEMENT_CONTROLLER}/${TASK_API}/${id}`,
+        `/${TASK_MANAGEMENT_CONTROLLER}/${TASK_API}/${obj.id}/${obj.board_id}`,
         {}
       );
 

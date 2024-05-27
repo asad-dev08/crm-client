@@ -21,6 +21,7 @@ export const BoardItem = ({
   handleClick,
   handleDeleteBoard,
   handleEditBoard,
+  handleViewBoard,
 }: {
   id: string;
   className?: string;
@@ -33,19 +34,14 @@ export const BoardItem = ({
   handleClick: (e: any, obj: any) => void;
   handleDeleteBoard: (id: any) => void;
   handleEditBoard: (id: any) => void;
+  handleViewBoard: (id: any) => void;
 }) => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const showDeleteModal = (e, id) => {
     setDeleteModalVisible(true);
   };
   const handleDeleteModalOk = async () => {
-    // Perform delete action
-    // const response = await dispatch(deleteUser(selectedRow.id));
-    // if (response) {
-    //   toast.success("User deleted", { duration: 3000 });
-    //   setDeleteStatus(true); // Trigger data refetch
-    //   setDeleteModalVisible(false); // Close the modal
-    // }
+    handleDeleteBoard(id);
   };
 
   const handleDeleteModalCancel = () => {
@@ -93,12 +89,8 @@ export const BoardItem = ({
   const handleMenuClick = async (e, item) => {
     if (e.key === "edit") {
       handleEdit(e, item);
-      // const response = await dispatch(getUser(row.id));
-      // const data =
-      //   (await response) && response.payload && response.payload.data;
-      // setSelectedRow(data);
-      // showDrawer();
-      // setIsAdd(false);
+    } else if (e.key === "view") {
+      handleViewBoard(item);
     }
   };
 

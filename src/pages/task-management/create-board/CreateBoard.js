@@ -13,7 +13,14 @@ import {
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
-const CreateBoard = ({ isAdd, isOpen, handleModalClose, data, handleAdd }) => {
+const CreateBoard = ({
+  isAdd,
+  isOpen,
+  handleModalClose,
+  data,
+  handleAdd,
+  isView,
+}) => {
   const dispatch = useDispatch();
   const [columns, setColumns] = useState(
     data?.columns || [{ column_name: "", id: "" }]
@@ -100,6 +107,7 @@ const CreateBoard = ({ isAdd, isOpen, handleModalClose, data, handleAdd }) => {
     e.preventDefault();
     form.submit();
   };
+
   return (
     <div>
       <Modal
@@ -111,6 +119,7 @@ const CreateBoard = ({ isAdd, isOpen, handleModalClose, data, handleAdd }) => {
         footer
       >
         <Form
+          disabled={isView}
           className="my-10 flex flex-col gap-[5px]"
           layout="vertical"
           form={form}

@@ -2,8 +2,20 @@ import React, { useState } from "react";
 import { TaskCard } from "./TaskCard";
 import DropIndicator from "./DropIndicator";
 import AddTask from "./AddTask";
+import { useDispatch } from "react-redux";
+import { updateTask } from "../../../../redux/task-management/taskManagementSlice";
 
-const BoardColumn = ({ title, headingColor, tasks, column }) => {
+const BoardColumn = ({
+  title,
+  headingColor,
+  tasks,
+  column,
+  column_id,
+  handleUpdate,
+  board_id,
+  columns,
+}) => {
+  const dispatch = useDispatch();
   const [active, setActive] = useState(false);
 
   const handleDragStart = (e, task) => {
@@ -26,7 +38,7 @@ const BoardColumn = ({ title, headingColor, tasks, column }) => {
 
       let taskToTransfer = copy.find((c) => c.id === taskId);
       if (!taskToTransfer) return;
-      taskToTransfer = { ...taskToTransfer, column };
+      taskToTransfer = { ...taskToTransfer, column_name: column, column_id };
 
       copy = copy.filter((c) => c.id !== taskId);
 
@@ -41,8 +53,10 @@ const BoardColumn = ({ title, headingColor, tasks, column }) => {
         copy.splice(insertAtIndex, 0, taskToTransfer);
       }
 
-      //need to implement some logic here
-      //setTasks(copy);
+      //update task
+      dispatch(updateTask(taskToTransfer)).then(() => {
+        handleUpdate();
+      });
     }
   };
 
@@ -104,15 +118,17 @@ const BoardColumn = ({ title, headingColor, tasks, column }) => {
     setActive(false);
   };
 
-  const filteredCards = tasks.filter((c) => c.column_name === column);
+  const filteredCards = tasks
+    .filter((c) => c.column_name === column)
+    .sort((a, b) => parseInt(b.sequence_no, 10) - parseInt(a.sequence_no, 10));
 
   return (
     <div className="w-72 shrink-0">
-      <div className="mb-3 flex items-center justify-between bg-indigo-100 px-4 py-2 rounded-lg">
+      <div className="mb-3 flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-lg">
         <h3 className={`font-medium uppercase text-xs ${headingColor}`}>
           {title}
         </h3>
-        <span className="rounded-full text-white text-xs font-semibold bg-indigo-500 size-6 flex items-center justify-center">
+        <span className="rounded-full text-white text-xs  bg-indigo-500 size-6 flex items-center justify-center">
           {filteredCards.length}
         </span>
       </div>
@@ -121,17 +137,42 @@ const BoardColumn = ({ title, headingColor, tasks, column }) => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
       >
-        {filteredCards.map((c) => {
-          return (
-            <TaskCard
-              key={c.id}
-              {...c}
-              handleDragStart={handleDragStart}
-              className="cursor-grab active:cursor-grabbing"
-            />
-          );
-        })}
-        <DropIndicator beforeId={null} column={column} />
+        {filteredCards.length > 0 ? (
+          filteredCards.map((c) => {
+            const username =
+              c.users &&
+              c.users.length > 0 &&
+              c.users.map((user) => user.username).join(", ");
+            const userid =
+              c.users &&
+              c.users.length > 0 &&
+              c.users.map((user) => user.user_id).join(", ");
+
+            return (
+              <TaskCard
+                key={c.id}
+                {...c}
+                username={username}
+                user_id={userid}
+                columns={columns}
+                handleDragStart={handleDragStart}
+                taskCount={filteredCards.length}
+                className="cursor-grab active:cursor-grabbing"
+                task_users={c.users}
+              />
+            );
+          })
+        ) : (
+          <div className="text-xs py-5 border-2 rounded-lg my-5 border-dashed">
+            If you have task in other column you can change that taks's column
+            by dragging
+          </div>
+        )}
+        <DropIndicator
+          beforeId={null}
+          column={column}
+          taskCount={filteredCards.length}
+        />
         {/* <AddTask column={column} /> */}
       </div>
     </div>

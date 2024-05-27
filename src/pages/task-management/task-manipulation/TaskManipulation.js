@@ -40,22 +40,23 @@ const TaskManipulation = () => {
   const handleAdd = () => {
     dispatch(getTaskByBoard({ board_id: id }));
   };
+  const handleUpdate = () => {
+    dispatch(getTaskByBoard({ board_id: id }));
+  };
 
   const handleBack = () => {
     navigate("/task-management/boards", { replace: true });
   };
 
-  console.log("tasks:", tasks);
-
   return (
     <div className="h-screen w-full overflow-x-auto">
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between pr-5">
         <label
           className="flex items-center gap-1 hover:cursor-pointer group"
           onClick={handleBack}
         >
-          <MdArrowBack className="group-hover:scale-[1.2] group-hover:text-slate-700  text-xs" />
-          <span className="text-xs text-black hover:text-slate-700 font-semibold">
+          <MdArrowBack className="group-hover:scale-[1.2] group-hover:text-slate-500  text-xs" />
+          <span className="text-xs  hover:text-slate-500 font-semibold">
             Back to Board List
           </span>
         </label>
@@ -69,7 +70,7 @@ const TaskManipulation = () => {
         />
       </div>
       {tasks && tasks.length > 0 ? (
-        <Board board={board} tasks={tasks} />
+        <Board board={board} tasks={tasks} handleUpdate={handleUpdate} />
       ) : (
         <Result title="No Task Found" />
       )}
@@ -80,7 +81,7 @@ const TaskManipulation = () => {
           isAdd={isAdd}
           handleAdd={handleAdd}
           data={selectedTask}
-          id={id}
+          board_id={id}
           columns={
             board &&
             board.columns.length > 0 &&
@@ -94,15 +95,19 @@ const TaskManipulation = () => {
   );
 };
 
-const Board = ({ board, tasks }) => {
+const Board = ({ board, tasks, handleUpdate }) => {
   return (
     <div className="my-5 w-full flex gap-3">
       {board.columns.map((item, index) => (
         <BoardColumn
           title={item.column_name}
           column={item.column_name}
+          column_id={item.id}
           headingColor="text-indigo-500"
           tasks={tasks}
+          handleUpdate={handleUpdate}
+          board_id={board.id}
+          columns={board.columns}
         />
       ))}
       {/* <BurnBarrel setTasks={setTasks} /> */}
@@ -145,38 +150,5 @@ const BurnBarrel = ({ setTasks }) => {
     </div>
   );
 };
-const DEFAULT_CARDS = [
-  // BACKLOG
-  {
-    title: "Look into render bug in dashboard",
-    id: "1",
-    column: "in progress",
-  },
-  { title: "SOX compliance checklist", id: "2", column: "in progress" },
-  { title: "[SPIKE] Migrate to Azure", id: "3", column: "in progress" },
-  { title: "Document Notifications service", id: "4", column: "in progress" },
-  // TODO
-  {
-    title: "Research DB options for new microservice",
-    id: "5",
-    column: "todo",
-  },
-  { title: "Postmortem for outage", id: "6", column: "todo" },
-  { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
-
-  // DOING
-  {
-    title: "Refactor context providers to use Zustand",
-    id: "8",
-    column: "done",
-  },
-  { title: "Add logging to daily CRON", id: "9", column: "done" },
-  // DONE
-  {
-    title: "Set up DD dashboards for Lambda listener",
-    id: "10",
-    column: "done",
-  },
-];
 
 export default TaskManipulation;

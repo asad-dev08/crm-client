@@ -156,7 +156,6 @@ const CreateSecurityGroup = ({ onClose, open, data, isAdd }) => {
     setSecurityRuleList(tmpList);
   };
 
-  // console.log("list; ", securityRuleList);
   return (
     <Drawer
       title="Add/Edit Security Group"

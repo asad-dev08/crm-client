@@ -32,7 +32,9 @@ const AddTask = ({
   data,
   handleAdd,
   columns,
-  id,
+  board_id,
+  task_users,
+  isView,
 }) => {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
@@ -46,15 +48,19 @@ const AddTask = ({
 
   const onFinish = async (values) => {
     let user = users.find((x) => x.value === values.user_id) || [];
+    const taskUserId =
+      (task_users && task_users.find((x) => x.user_id === user.value)) || null;
+
     const model = {
       ...values,
       id: isAdd ? "" : data.id,
       target_date: selectedDate,
       column_id: values.column,
-      board_id: id,
+      board_id: board_id,
       users: [
         {
-          id: user.value,
+          id: isAdd ? null : taskUserId && taskUserId.id,
+          user_id: user.value,
         },
       ],
     };
@@ -131,7 +137,7 @@ const AddTask = ({
     },
   };
   const [selectedDate, setSelectedDate] = useState(
-    data ? dayjs(data.founded_date) : dayjs(new Date())
+    data ? dayjs(data.target_date) : dayjs(new Date())
   );
   const onChangeDate = (_, dateStr) => {
     setSelectedDate(dateStr);
@@ -148,6 +154,7 @@ const AddTask = ({
         footer
       >
         <Form
+          disabled={isView}
           className="my-10 flex flex-col gap-[5px]"
           layout="vertical"
           form={form}
@@ -158,7 +165,7 @@ const AddTask = ({
             title: (data && data.title) || "",
             description: (data && data.description) || "",
             column: (data && data.column) || "",
-            user: (data && data.user_id) || "",
+            user_id: (data && data.user_id) || "",
 
             target_date:
               (data && dayjs(data.target_date)) ||
