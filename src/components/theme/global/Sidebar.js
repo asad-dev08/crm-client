@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Menu, Layout, Card, Typography } from "antd";
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
 import * as AntdIcons from "@ant-design/icons";
+import { FaIcons } from "react-icons/fa";
 
 const { Title } = Typography;
 
@@ -42,8 +43,9 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
     setMenuItems(nestedItems);
   }, [menus]);
 
-  function CustomIcon(type) {
+  function CustomIcon(type, icon_library = "antd") {
     const AntdIcon = AntdIcons[type];
+
     return AntdIcon ? <AntdIcon /> : null;
   }
   function addKeyProperty(menuItem) {
@@ -55,24 +57,24 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
     }
   }
   menuItems.forEach(addKeyProperty);
-  function getItem(id, label, url, icon, key, children, type) {
+  function getItem(id, label, url, icon, icon_library, key, children, type) {
     return {
       id,
       key,
       children,
       label,
       url,
-      icon: icon ? CustomIcon(icon) : null,
+      icon: icon ? CustomIcon(icon, icon_library) : null,
       type,
     };
   }
 
   function convertMenuItem(menuItem) {
-    const { id, title, url, icon, children } = menuItem;
+    const { id, title, url, icon, icon_library, children } = menuItem;
     const key = id.toString();
     const childrenItems =
       children.length > 0 ? children.flatMap(convertMenuItem) : undefined;
-    return getItem(id, title, url, icon, key, childrenItems);
+    return getItem(id, title, url, icon, icon_library, key, childrenItems);
   }
 
   function getLevelKeys(items1) {
