@@ -48,6 +48,7 @@ const TaskManipulation = () => {
     navigate("/task-management/boards", { replace: true });
   };
 
+  console.log("board:", board);
   return (
     <div className="h-screen w-full overflow-x-auto">
       <div className="w-full flex items-center justify-between pr-5">
@@ -110,43 +111,6 @@ const Board = ({ board, tasks, handleUpdate }) => {
           columns={board.columns}
         />
       ))}
-      {/* <BurnBarrel setTasks={setTasks} /> */}
-    </div>
-  );
-};
-
-const BurnBarrel = ({ setTasks }) => {
-  const [active, setActive] = useState(false);
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setActive(true);
-  };
-
-  const handleDragLeave = () => {
-    setActive(false);
-  };
-
-  const handleDragEnd = (e) => {
-    const taskId = e.dataTransfer.getData("taskId");
-
-    setTasks((pv) => pv.filter((c) => c.id !== taskId));
-
-    setActive(false);
-  };
-
-  return (
-    <div
-      onDrop={handleDragEnd}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
-        active
-          ? "border-red-800 bg-red-800/20 text-red-500"
-          : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
-      }`}
-    >
-      {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
     </div>
   );
 };

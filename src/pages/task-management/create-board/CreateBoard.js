@@ -99,7 +99,7 @@ const CreateBoard = ({
 
   const handleColumnChange = (value, index) => {
     const newColumns = [...columns];
-    newColumns[index].column_name = value;
+    newColumns[index] = { ...newColumns[index], column_name: value };
     setColumns(newColumns);
   };
 

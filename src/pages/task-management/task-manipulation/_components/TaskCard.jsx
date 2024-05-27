@@ -185,7 +185,6 @@ export const TaskCard = ({
             target_date,
             taskCount,
             board_id,
-            target_date,
           }}
           board_id={board_id}
           task_users={task_users}

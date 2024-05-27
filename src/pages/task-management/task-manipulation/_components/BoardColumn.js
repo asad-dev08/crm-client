@@ -52,7 +52,6 @@ const BoardColumn = ({
 
         copy.splice(insertAtIndex, 0, taskToTransfer);
       }
-
       //update task
       dispatch(updateTask(taskToTransfer)).then(() => {
         handleUpdate();
