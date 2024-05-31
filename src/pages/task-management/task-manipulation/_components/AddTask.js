@@ -24,6 +24,7 @@ import {
   saveTask,
   updateTask,
 } from "../../../../redux/task-management/taskManagementSlice";
+import { TaskPriorityList } from "../../../../util/actionTypes";
 
 const AddTask = ({
   isAdd,
@@ -55,6 +56,8 @@ const AddTask = ({
       ...values,
       id: isAdd ? "" : data.id,
       target_date: selectedDate,
+      start_date: selectedStartDate,
+      priority: values.priority,
       column_id: values.column,
       board_id: board_id,
       users: [
@@ -143,6 +146,13 @@ const AddTask = ({
     setSelectedDate(dateStr);
   };
 
+  const [selectedStartDate, setSelectedStartDate] = useState(
+    data ? dayjs(data.start_date) : dayjs(new Date())
+  );
+  const onChangeStartDate = (_, dateStr) => {
+    setSelectedStartDate(dateStr);
+  };
+
   return (
     <>
       <Modal
@@ -166,7 +176,11 @@ const AddTask = ({
             description: (data && data.description) || "",
             column: (data && data.column) || "",
             user_id: (data && data.user_id) || "",
+            priority: (data && data.priority) || "",
 
+            start_date:
+              (data && dayjs(data.start_date)) ||
+              moment(new Date()).format("YYYY-MM-DD HH:mm:ss A"),
             target_date:
               (data && dayjs(data.target_date)) ||
               moment(new Date()).format("YYYY-MM-DD HH:mm:ss A"),
@@ -234,6 +248,39 @@ const AddTask = ({
               defaultValue={(data && data.column) || null}
               onChange={handleChange}
             />
+          </Form.Item>
+          <Form.Item
+            className="!w-full"
+            name="priority"
+            label="Priority"
+            rules={[
+              {
+                required: true,
+                message: "Please select the priority of this task.",
+              },
+            ]}
+          >
+            <Select
+              className="w-full"
+              options={TaskPriorityList}
+              defaultValue={(data && data.priority) || null}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item
+            name="start_date"
+            label="Start Date"
+            className="w-full"
+            required
+          >
+            <ConfigProvider locale={globalBuddhistLocale}>
+              <DatePicker
+                className="w-full"
+                defaultValue={selectedStartDate}
+                showTime
+                onChange={onChangeStartDate}
+              />
+            </ConfigProvider>
           </Form.Item>
           <Form.Item
             name="target_date"

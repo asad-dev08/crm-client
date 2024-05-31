@@ -22,6 +22,7 @@ export const BoardItem = ({
   handleDeleteBoard,
   handleEditBoard,
   handleViewBoard,
+  permission,
 }: {
   id: string;
   className?: string;
@@ -35,6 +36,7 @@ export const BoardItem = ({
   handleDeleteBoard: (id: any) => void;
   handleEditBoard: (id: any) => void;
   handleViewBoard: (id: any) => void;
+  permission: any;
 }) => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const showDeleteModal = (e, id) => {
@@ -67,23 +69,29 @@ export const BoardItem = ({
 
   const getMenu = (id) => (
     <Menu onClick={(e) => handleMenuClick(e, id)}>
-      <Menu.Item key="edit">
-        <div className="flex items-center gap-2">
-          <MdEdit /> Edit
-        </div>
-      </Menu.Item>
-      <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, id)}>
-        <div className="flex items-center gap-2">
-          <MdDeleteOutline />
-          Delete
-        </div>
-      </Menu.Item>
-      <Menu.Item key="view">
-        <div className="flex items-center gap-2">
-          <MdOutlineRemoveRedEye />
-          View
-        </div>
-      </Menu.Item>
+      {permission && permission.can_update ? (
+        <Menu.Item key="edit">
+          <div className="flex items-center gap-2">
+            <MdEdit /> Edit
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_delete ? (
+        <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, id)}>
+          <div className="flex items-center gap-2">
+            <MdDeleteOutline />
+            Delete
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_view ? (
+        <Menu.Item key="view">
+          <div className="flex items-center gap-2">
+            <MdOutlineRemoveRedEye />
+            View
+          </div>
+        </Menu.Item>
+      ) : null}
     </Menu>
   );
   const handleMenuClick = async (e, item) => {

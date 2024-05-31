@@ -11,6 +11,9 @@ import securityGroupReducer from "./security-group/securityGroupSlice";
 import companyReducer from "./company/companySlice";
 import eventCalendarReducer from "./event-calendar/eventCalendarSlice";
 import taskManagementReducer from "./task-management/taskManagementSlice";
+import emailTemplateReducer from "./email-template/emailTemplateSlice";
+import leadSourceReducer from "./lead/leadSourceSlice";
+import leadStatusReducer from "./lead/leadStatusSlice";
 
 import logger from "redux-logger";
 
@@ -26,6 +29,9 @@ const store = configureStore({
     company: companyReducer,
     eventCalendar: eventCalendarReducer,
     taskManagement: taskManagementReducer,
+    emailTemplate: emailTemplateReducer,
+    leadSource: leadSourceReducer,
+    leadStatus: leadStatusReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

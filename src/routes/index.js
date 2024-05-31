@@ -18,6 +18,9 @@ import { useEffect, useState } from "react";
 import CompanyList from "../pages/company/company-list/CompanyList";
 import Boards from "../pages/task-management/boards/Boards";
 import TaskManipulation from "../pages/task-management/task-manipulation/TaskManipulation";
+import EmailTemplateList from "../pages/setttings/email-template/EmailTemplateList";
+import SourceList from "../pages/leads/source-list/SourceList";
+import StatusList from "../pages/leads/status-list/StatusList";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -64,6 +67,18 @@ const AppRoutes = () => {
         {
           path: "/task-management/task-manipulation/:id",
           element: <TaskManipulation />,
+        },
+        {
+          path: "/settings/email-template",
+          element: <EmailTemplateList />,
+        },
+        {
+          path: "/leads/source-list",
+          element: <SourceList />,
+        },
+        {
+          path: "/leads/status-list",
+          element: <StatusList />,
         },
         {
           path: "/*",

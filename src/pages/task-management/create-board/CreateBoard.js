@@ -20,6 +20,7 @@ const CreateBoard = ({
   data,
   handleAdd,
   isView,
+  permission,
 }) => {
   const dispatch = useDispatch();
   const [columns, setColumns] = useState(
@@ -187,11 +188,17 @@ const CreateBoard = ({
               <span className="mt-[2px]">Add Column</span>
             </Button>
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="button" onClick={handleSaveClick}>
-              Save
-            </Button>
-          </Form.Item>
+          {permission && permission.can_create ? (
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="button"
+                onClick={handleSaveClick}
+              >
+                Save
+              </Button>
+            </Form.Item>
+          ) : null}
         </Form>
       </Modal>
     </div>

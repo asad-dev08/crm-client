@@ -9,7 +9,7 @@ import PermittedButton from "../../../components/PermittedButton/PermittedButton
 import AddTask from "./_components/AddTask";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskByBoard } from "../../../redux/task-management/taskManagementSlice.js";
-import { Result } from "antd";
+import { Empty, Result } from "antd";
 
 const TaskManipulation = () => {
   const params = useParams();
@@ -48,7 +48,6 @@ const TaskManipulation = () => {
     navigate("/task-management/boards", { replace: true });
   };
 
-  console.log("board:", board);
   return (
     <div className="h-screen w-full overflow-x-auto">
       <div className="w-full flex items-center justify-between pr-5">
@@ -71,9 +70,16 @@ const TaskManipulation = () => {
         />
       </div>
       {tasks && tasks.length > 0 ? (
-        <Board board={board} tasks={tasks} handleUpdate={handleUpdate} />
+        <Board
+          board={board}
+          tasks={tasks}
+          handleUpdate={handleUpdate}
+          permission={permission}
+        />
       ) : (
-        <Result title="No Task Found" />
+        <div className="w-full h-1/2 flex items-center justify-center">
+          <Empty description="No Tasks Found" className="font-semibold" />
+        </div>
       )}
       {isOpen && (
         <AddTask
@@ -96,7 +102,7 @@ const TaskManipulation = () => {
   );
 };
 
-const Board = ({ board, tasks, handleUpdate }) => {
+const Board = ({ board, tasks, handleUpdate, permission }) => {
   return (
     <div className="my-5 w-full flex gap-3">
       {board.columns.map((item, index) => (
@@ -109,6 +115,7 @@ const Board = ({ board, tasks, handleUpdate }) => {
           handleUpdate={handleUpdate}
           board_id={board.id}
           columns={board.columns}
+          permission={permission}
         />
       ))}
     </div>

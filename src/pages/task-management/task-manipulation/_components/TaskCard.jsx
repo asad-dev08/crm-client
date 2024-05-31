@@ -29,6 +29,8 @@ export const TaskCard = ({
   description,
   is_active,
   username,
+  priority,
+  start_date,
   target_date,
   taskCount,
   board_id,
@@ -36,6 +38,7 @@ export const TaskCard = ({
   user_id,
   column_id,
   task_users,
+  permission,
 }) => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isView, setIsView] = useState(false);
@@ -57,23 +60,29 @@ export const TaskCard = ({
   };
   const getMenu = (id) => (
     <Menu onClick={(e) => handleMenuClick(e, id)}>
-      <Menu.Item key="edit">
-        <div className="flex items-center gap-2">
-          <MdEdit /> Edit
-        </div>
-      </Menu.Item>
-      <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, id)}>
-        <div className="flex items-center gap-2">
-          <MdDeleteOutline />
-          Delete
-        </div>
-      </Menu.Item>
-      <Menu.Item key="view">
-        <div className="flex items-center gap-2">
-          <MdOutlineRemoveRedEye />
-          View
-        </div>
-      </Menu.Item>
+      {permission && permission.can_update ? (
+        <Menu.Item key="edit">
+          <div className="flex items-center gap-2">
+            <MdEdit /> Edit
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_delete ? (
+        <Menu.Item key="delete" onClick={(e) => showDeleteModal(e, id)}>
+          <div className="flex items-center gap-2">
+            <MdDeleteOutline />
+            Delete
+          </div>
+        </Menu.Item>
+      ) : null}
+      {permission && permission.can_view ? (
+        <Menu.Item key="view">
+          <div className="flex items-center gap-2">
+            <MdOutlineRemoveRedEye />
+            View
+          </div>
+        </Menu.Item>
+      ) : null}
     </Menu>
   );
   const handleMenuClick = async (e, item) => {
@@ -95,6 +104,21 @@ export const TaskCard = ({
     setIsEdit(true);
   };
 
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case "Urgent":
+        return "text-red-500";
+      case "High":
+        return "text-orange-500";
+      case "Medium":
+        return "text-yellow-500";
+      case "Low":
+        return "text-green-500";
+      default:
+        return "text-gray-500";
+    }
+  };
+
   return (
     <>
       <DropIndicator beforeId={id} column={column_name} taskCount={taskCount} />
@@ -112,7 +136,12 @@ export const TaskCard = ({
         >
           <div className="group-hover/bento:translate-x-1 transition duration-200 text-left flex flex-col gap-2 relative">
             <div className="w-full flex items-center justify-between z-10">
-              <MdTask />
+              <div className="flex items-center gap-2">
+                <MdTask />
+                <span className={`text-xs ${getPriorityColor(priority)}`}>
+                  {priority} priority
+                </span>
+              </div>
               <Dropdown
                 overlay={getMenu(id)}
                 placement="bottomRight"
@@ -134,6 +163,9 @@ export const TaskCard = ({
             <div className="w-full flex flex-col gap-2">
               <label className="font-semibold text-xs text-slate-500">
                 Assigned to: {username}
+              </label>
+              <label className="font-semibold text-xs text-slate-500">
+                start date: {moment(start_date).format("YYYY-MM-DD HH:mm:ss A")}
               </label>
               <label className="font-semibold text-xs text-slate-500">
                 Target date:{" "}
@@ -182,6 +214,8 @@ export const TaskCard = ({
             user_id,
             is_active,
             username,
+            priority,
+            start_date,
             target_date,
             taskCount,
             board_id,

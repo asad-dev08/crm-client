@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Pagination, Table, Typography } from "antd";
+import { Button, Empty, Pagination, Table, Typography } from "antd";
 
 const { Text } = Typography;
 
@@ -40,7 +40,7 @@ const PaginatedDataGrid = ({
   };
 
   if (data && data.length === 0) {
-    return <Text>No Data Found</Text>;
+    return <Empty description="No Data Found" />;
   }
 
   return (

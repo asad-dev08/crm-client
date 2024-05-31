@@ -76,3 +76,7 @@
 .ant-picker-calendar {
   padding: 10px !important;
 }
+
+.ql-container.ql-snow {
+  height: 150px;
+}

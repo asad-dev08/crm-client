@@ -4,6 +4,7 @@ import DropIndicator from "./DropIndicator";
 import AddTask from "./AddTask";
 import { useDispatch } from "react-redux";
 import { updateTask } from "../../../../redux/task-management/taskManagementSlice";
+import toast from "react-hot-toast";
 
 const BoardColumn = ({
   title,
@@ -14,6 +15,7 @@ const BoardColumn = ({
   handleUpdate,
   board_id,
   columns,
+  permission,
 }) => {
   const dispatch = useDispatch();
   const [active, setActive] = useState(false);
@@ -23,6 +25,14 @@ const BoardColumn = ({
   };
 
   const handleDragEnd = (e) => {
+    if (permission && !permission.can_update) {
+      clearHighlights();
+      toast.error(
+        "Your don't have edit permission so you can not modify any task!",
+        { duration: 3000 }
+      );
+      return;
+    }
     const taskId = e.dataTransfer.getData("taskId");
 
     setActive(false);
@@ -158,6 +168,7 @@ const BoardColumn = ({
                 taskCount={filteredCards.length}
                 className="cursor-grab active:cursor-grabbing"
                 task_users={c.users}
+                permission={permission}
               />
             );
           })

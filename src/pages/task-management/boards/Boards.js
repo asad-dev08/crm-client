@@ -6,7 +6,7 @@ import { MdAdd } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getPermissionsForMenu } from "../../../util/helper.js";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Modal, Result } from "antd";
+import { Empty, Modal, Result } from "antd";
 import CreateBoard from "../create-board/CreateBoard.js";
 import {
   deleteBoard,
@@ -114,11 +114,14 @@ const Boards = () => {
               handleDeleteBoard={handleDeleteBoard}
               handleEditBoard={handleEditBoard}
               handleViewBoard={handleViewBoard}
+              permission={permission}
             />
           ))}
         </div>
       ) : (
-        <Result title="No Board Found" />
+        <div className="w-full h-1/2 flex items-center justify-center">
+          <Empty description="No Boards Found" className="font-semibold" />
+        </div>
       )}
 
       {isOpen && (
@@ -129,6 +132,7 @@ const Boards = () => {
           isView={isView}
           handleAdd={handleAdd}
           data={selectedBoard}
+          permission={permission}
         />
       )}
     </div>
