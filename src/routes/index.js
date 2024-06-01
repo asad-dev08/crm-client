@@ -21,6 +21,10 @@ import TaskManipulation from "../pages/task-management/task-manipulation/TaskMan
 import EmailTemplateList from "../pages/setttings/email-template/EmailTemplateList";
 import SourceList from "../pages/leads/source-list/SourceList";
 import StatusList from "../pages/leads/status-list/StatusList";
+import LeadsList from "../pages/leads/leads-list/LeadsList";
+import CustomersList from "../pages/customers/customers-list/CustomersList";
+import CurrencyList from "../pages/currency/currency-list/CurrencyList";
+import CustomerTypeList from "../pages/customers/customer-type/customer-type-list/CustomerTypeList";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -79,6 +83,22 @@ const AppRoutes = () => {
         {
           path: "/leads/status-list",
           element: <StatusList />,
+        },
+        {
+          path: "/leads/leads-list",
+          element: <LeadsList />,
+        },
+        {
+          path: "/customers/customers-list",
+          element: <CustomersList />,
+        },
+        {
+          path: "/currency",
+          element: <CurrencyList />,
+        },
+        {
+          path: "/customers/customer-types",
+          element: <CustomerTypeList />,
         },
         {
           path: "/*",

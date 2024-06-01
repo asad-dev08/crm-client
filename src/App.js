@@ -25,27 +25,6 @@ function App() {
       <LoaderWrapper>
         <AuthProvider>
           <AppRoutes />
-          {/* <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Dashboard />} />
-
-                <Route path="*" element={<ErrorPage />} />
-                <Route path="login" element={<Login />} />
-
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="calendar" element={<Calendar />} />
-                <Route path="users/user-list" element={<UserList />} />
-
-                <Route
-                  path="security-rule/security-rule-list"
-                  element={<SecurityRuleList />}
-                />
-                <Route
-                  path="security-group/security-group-list"
-                  element={<SecurityGroupList />}
-                />
-              </Route>
-            </Routes> */}
         </AuthProvider>
       </LoaderWrapper>
       {/* </BrowserRouter> */}

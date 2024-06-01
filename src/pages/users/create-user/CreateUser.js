@@ -15,6 +15,7 @@ import { saveUser, updateUser } from "../../../redux/user/userSlice";
 import toast from "react-hot-toast";
 import { getSecurityGroups } from "../../../redux/security-group/securityGroupSlice";
 import { getCompanys } from "../../../redux/company/companySlice";
+import { UserTypeList } from "../../../util/actionTypes";
 
 const defaultForm = {
   id: 0,
@@ -51,6 +52,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
   const [securityGroupList, setSecurityGroupList] = useState([]);
   const [securityGroupListFinal, setSecurityGroupListFinal] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
 
   const securityGroupIdsSelected = manipulateGroupList(data);
 
@@ -194,6 +196,9 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
   const handleChange = (value) => {
     setSelectedCompany(value);
   };
+  const handleChangeType = (value) => {
+    setSelectedType(value);
+  };
 
   return (
     <Drawer
@@ -232,6 +237,7 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
 
           securityGroupIdsSelected: securityGroupIdsSelected || [],
           company_id: (data && data.company_id) || "",
+          user_type: (data && data.user_type) || "",
         }}
         scrollToFirstError
       >
@@ -312,6 +318,24 @@ const CreateUser = ({ onClose, open, data, isAdd }) => {
           ]}
         >
           <Input.TextArea rows={4} />
+        </Form.Item>
+        <Form.Item
+          className="!w-full"
+          name="user_type"
+          label="User Type"
+          rules={[
+            {
+              required: true,
+              message: "Please select the type of this user.",
+            },
+          ]}
+        >
+          <Select
+            className="w-full"
+            options={UserTypeList}
+            defaultValue={(data && data.user_type) || null}
+            onChange={handleChange}
+          />
         </Form.Item>
         <Form.Item
           name="securityGroupIdsSelected"

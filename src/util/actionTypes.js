@@ -15,6 +15,11 @@ export const EmailEventsTypeList = [
   { value: "4", label: "Greetings when accept offer" },
   { value: "5", label: "Contract to customer" },
 ];
+export const UserTypeList = [
+  { value: 1, label: "STAFF" },
+  { value: 2, label: "CUSTOMER" },
+  { value: 3, label: "VISITOR" },
+];
 
 export const SESSION_TIMEOUT = 5;
 
@@ -28,6 +33,11 @@ export const EMAIL_TEMPLATE_CONTROLLER = "email-template";
 
 export const LEAD_SOURCE_CONTROLLER = "lead-source";
 export const LEAD_STATUS_CONTROLLER = "lead-status";
+export const LEAD_CONTROLLER = "lead";
+
+export const CURRENCY_CONTROLLER = "currency";
+export const CUSTOMER_TYPE_CONTROLLER = "customer-type";
+export const CUSTOMER_CONTROLLER = "customer";
 
 export const USER_CONTROLLER = "user";
 export const COMPANY_CONTROLLER = "company";

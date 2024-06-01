@@ -14,6 +14,10 @@ import taskManagementReducer from "./task-management/taskManagementSlice";
 import emailTemplateReducer from "./email-template/emailTemplateSlice";
 import leadSourceReducer from "./lead/leadSourceSlice";
 import leadStatusReducer from "./lead/leadStatusSlice";
+import leadReducer from "./lead/leadSlice";
+import customerTypeReducer from "./customer-type/customerTypeSlice";
+import currencyReducer from "./currency/currencySlice";
+import customerReducer from "./customer/customerSlice";
 
 import logger from "redux-logger";
 
@@ -32,6 +36,14 @@ const store = configureStore({
     emailTemplate: emailTemplateReducer,
     leadSource: leadSourceReducer,
     leadStatus: leadStatusReducer,
+    lead: leadReducer,
+    leadSource: leadSourceReducer,
+    leadStatus: leadStatusReducer,
+    lead: leadReducer,
+
+    customerType: customerTypeReducer,
+    currency: currencyReducer,
+    customer: customerReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

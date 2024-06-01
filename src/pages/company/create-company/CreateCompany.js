@@ -24,28 +24,6 @@ import en from "antd/es/date-picker/locale/en_US";
 import enUS from "antd/es/locale/en_US";
 import dayjs from "dayjs";
 
-const defaultForm = {
-  id: "",
-  company_name: "",
-  company_short_name: "",
-  company_code: "",
-  registration_number: "",
-  tax_id: "",
-  address: "",
-  city: "",
-  state: "",
-  country: "",
-  postal_code: "",
-  phone: "",
-  email: "",
-  website: "",
-  founded_date: moment(new Date()).format("YYYY-MM-DD HH:mm:ss A"),
-  industry: "",
-  number_of_employees: 0,
-  annual_revenue: 0,
-  description: "",
-};
-
 const manipulateGroupList = (list) => {
   const data =
     list && list.groupList
