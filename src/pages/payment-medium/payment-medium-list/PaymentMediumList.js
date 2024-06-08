@@ -4,10 +4,10 @@ import PaginatedDataGrid from "../../../components/theme/global/datagrid/Paginat
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  deleteCurrency,
-  getCurrency,
-  getCurrencysWithPagination,
-} from "../../../redux/currency/currencySlice";
+  deletePaymentMedium,
+  getPaymentMedium,
+  getPaymentMediumsWithPagination,
+} from "../../../redux/payment-medium/paymentMediumSlice";
 import { Button, Dropdown, Menu, Modal } from "antd";
 import {
   MdDeleteOutline,
@@ -17,10 +17,10 @@ import {
 } from "react-icons/md";
 import toast from "react-hot-toast";
 import { getPermissionsForMenu } from "../../../util/helper";
-import CurrencyListHeader from "./CurrencyListHeader";
-import CreateCurrency from "../create-currency/CreateCurrency";
+import PaymentMediumListHeader from "./PaymentMediumListHeader";
+import CreatePaymentMedium from "../create-payment-medium/CreatePaymentMedium";
 
-const CurrencyList = () => {
+const PaymentMediumList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,7 +77,7 @@ const CurrencyList = () => {
   );
   const handleMenuClick = async (e, row) => {
     if (e.key === "edit") {
-      const response = await dispatch(getCurrency(row.id));
+      const response = await dispatch(getPaymentMedium(row.id));
       const data =
         (await response) && response.payload && response.payload.data;
       setSelectedRow(data);
@@ -92,9 +92,9 @@ const CurrencyList = () => {
   };
   const handleDeleteModalOk = async () => {
     // Perform delete action
-    const response = await dispatch(deleteCurrency(selectedRow.id));
+    const response = await dispatch(deletePaymentMedium(selectedRow.id));
     if (response) {
-      toast.success("Currency deleted", { duration: 3000 });
+      toast.success("PaymentMedium deleted", { duration: 3000 });
       setDeleteStatus(true); // Trigger data refetch
       setDeleteModalVisible(false); // Close the modal
     }
@@ -106,7 +106,7 @@ const CurrencyList = () => {
 
   const columns = [
     { columnName: "name", columnShow: "name" },
-    { columnName: "conversion_rate", columnShow: "rate" },
+    { columnName: "description", columnShow: "description" },
     { columnName: "is_active", columnShow: "status" },
     {
       columnName: "actions",
@@ -151,12 +151,13 @@ const CurrencyList = () => {
     return data.map((item) => ({
       ...item,
       is_active: item.is_active ? "Active" : "Inactive",
+      description: item.description.slice(0, 100),
     }));
   };
   const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
-      getCurrencysWithPagination({
-        tableName: "currency",
+      getPaymentMediumsWithPagination({
+        tableName: "payment-medium",
         page: page,
         pageSize: pageSize,
       })
@@ -178,7 +179,7 @@ const CurrencyList = () => {
   }, [deleteStatus]);
   return (
     <div>
-      <CurrencyListHeader
+      <PaymentMediumListHeader
         showDrawer={showDrawer}
         setIsAdd={setAddOrEdit}
         permission={permission}
@@ -190,7 +191,7 @@ const CurrencyList = () => {
         dataManipulator={manipulateData}
       />
       {open && (
-        <CreateCurrency
+        <CreatePaymentMedium
           onClose={onClose}
           open={open}
           data={selectedRow}
@@ -204,10 +205,10 @@ const CurrencyList = () => {
         onCancel={handleDeleteModalCancel}
         maskClosable={false}
       >
-        <p>Are you sure you want to delete this currency?</p>
+        <p>Are you sure you want to delete this payment medium?</p>
       </Modal>
     </div>
   );
 };
 
-export default CurrencyList;
+export default PaymentMediumList;

@@ -25,6 +25,9 @@ import LeadsList from "../pages/leads/leads-list/LeadsList";
 import CustomersList from "../pages/customers/customers-list/CustomersList";
 import CurrencyList from "../pages/currency/currency-list/CurrencyList";
 import CustomerTypeList from "../pages/customers/customer-type/customer-type-list/CustomerTypeList";
+import TaxRateList from "../pages/tax-rate/tax-rate-list/TaxRateList";
+import PaymentMediumList from "../pages/payment-medium/payment-medium-list/PaymentMediumList";
+import ExpenseCategoryList from "../pages/expense-category/expense-category-list/ExpenseCategoryList";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -100,6 +103,20 @@ const AppRoutes = () => {
           path: "/customers/customer-types",
           element: <CustomerTypeList />,
         },
+
+        {
+          path: "/tax-rates",
+          element: <TaxRateList />,
+        },
+        {
+          path: "/payment-mediums",
+          element: <PaymentMediumList />,
+        },
+        {
+          path: "/expense-categorys",
+          element: <ExpenseCategoryList />,
+        },
+
         {
           path: "/*",
           element: <ErrorPage />,

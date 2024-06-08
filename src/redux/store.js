@@ -19,6 +19,10 @@ import customerTypeReducer from "./customer-type/customerTypeSlice";
 import currencyReducer from "./currency/currencySlice";
 import customerReducer from "./customer/customerSlice";
 
+import paymentMediumReducer from "./payment-medium/paymentMediumSlice";
+import taxRateReducer from "./tax-rate/taxRateSlice";
+import expenseCategoryReducer from "./expense-category/expenseCategorySlice";
+
 import logger from "redux-logger";
 
 const store = configureStore({
@@ -44,6 +48,10 @@ const store = configureStore({
     customerType: customerTypeReducer,
     currency: currencyReducer,
     customer: customerReducer,
+
+    paymentMedium: paymentMediumReducer,
+    taxRate: taxRateReducer,
+    expenseCategory: expenseCategoryReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

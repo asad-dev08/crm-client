@@ -4,10 +4,10 @@ import PaginatedDataGrid from "../../../components/theme/global/datagrid/Paginat
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  deleteCurrency,
-  getCurrency,
-  getCurrencysWithPagination,
-} from "../../../redux/currency/currencySlice";
+  deleteTaxRate,
+  getTaxRate,
+  getTaxRatesWithPagination,
+} from "../../../redux/tax-rate/taxRateSlice";
 import { Button, Dropdown, Menu, Modal } from "antd";
 import {
   MdDeleteOutline,
@@ -17,10 +17,10 @@ import {
 } from "react-icons/md";
 import toast from "react-hot-toast";
 import { getPermissionsForMenu } from "../../../util/helper";
-import CurrencyListHeader from "./CurrencyListHeader";
-import CreateCurrency from "../create-currency/CreateCurrency";
+import TaxRateListHeader from "./TaxRateListHeader";
+import CreateTaxRate from "../create-tax-rate/CreateTaxRate";
 
-const CurrencyList = () => {
+const TaxRateList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,7 +77,7 @@ const CurrencyList = () => {
   );
   const handleMenuClick = async (e, row) => {
     if (e.key === "edit") {
-      const response = await dispatch(getCurrency(row.id));
+      const response = await dispatch(getTaxRate(row.id));
       const data =
         (await response) && response.payload && response.payload.data;
       setSelectedRow(data);
@@ -92,9 +92,9 @@ const CurrencyList = () => {
   };
   const handleDeleteModalOk = async () => {
     // Perform delete action
-    const response = await dispatch(deleteCurrency(selectedRow.id));
+    const response = await dispatch(deleteTaxRate(selectedRow.id));
     if (response) {
-      toast.success("Currency deleted", { duration: 3000 });
+      toast.success("TaxRate deleted", { duration: 3000 });
       setDeleteStatus(true); // Trigger data refetch
       setDeleteModalVisible(false); // Close the modal
     }
@@ -106,7 +106,7 @@ const CurrencyList = () => {
 
   const columns = [
     { columnName: "name", columnShow: "name" },
-    { columnName: "conversion_rate", columnShow: "rate" },
+    { columnName: "rate", columnShow: "rate" },
     { columnName: "is_active", columnShow: "status" },
     {
       columnName: "actions",
@@ -155,8 +155,8 @@ const CurrencyList = () => {
   };
   const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
-      getCurrencysWithPagination({
-        tableName: "currency",
+      getTaxRatesWithPagination({
+        tableName: "tax-rate",
         page: page,
         pageSize: pageSize,
       })
@@ -178,7 +178,7 @@ const CurrencyList = () => {
   }, [deleteStatus]);
   return (
     <div>
-      <CurrencyListHeader
+      <TaxRateListHeader
         showDrawer={showDrawer}
         setIsAdd={setAddOrEdit}
         permission={permission}
@@ -190,7 +190,7 @@ const CurrencyList = () => {
         dataManipulator={manipulateData}
       />
       {open && (
-        <CreateCurrency
+        <CreateTaxRate
           onClose={onClose}
           open={open}
           data={selectedRow}
@@ -204,10 +204,10 @@ const CurrencyList = () => {
         onCancel={handleDeleteModalCancel}
         maskClosable={false}
       >
-        <p>Are you sure you want to delete this currency?</p>
+        <p>Are you sure you want to delete this tax rate?</p>
       </Modal>
     </div>
   );
 };
 
-export default CurrencyList;
+export default TaxRateList;

@@ -39,6 +39,10 @@ export const CURRENCY_CONTROLLER = "currency";
 export const CUSTOMER_TYPE_CONTROLLER = "customer-type";
 export const CUSTOMER_CONTROLLER = "customer";
 
+export const PAYMENT_MEDIUM_CONTROLLER = "payment-medium";
+export const TAX_RATE_CONTROLLER = "tax-rate";
+export const EXPENSE_CATEGORY_CONTROLLER = "expense-category";
+
 export const USER_CONTROLLER = "user";
 export const COMPANY_CONTROLLER = "company";
 export const EVENT_CALENDAR_CONTROLLER = "event-calendar";
