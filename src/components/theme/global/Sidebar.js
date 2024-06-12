@@ -182,7 +182,7 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
   return (
     <div className="h-full">
       <Card
-        style={{ borderRadius: 0, width: 250, height: 62 }}
+        style={{ borderRadius: 0, width: 280, height: 62 }}
         bodyStyle={{
           padding: "",
         }}
@@ -196,7 +196,7 @@ const Sidebar = ({ defaultOpenKeys, collapsed, isMediumScreen, menus }) => {
         style={{
           height: !isMediumScreen ? "calc(100vh - 62px)" : "",
           overflowY: "auto",
-          width: "250px",
+          width: "280px",
           padding: "0 5px",
           fontSize: 13,
           fontWeight: 500,

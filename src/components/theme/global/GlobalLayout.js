@@ -76,11 +76,11 @@ const GlobalLayout = () => {
         <div>
           {isMediumScreen ? (
             <Drawer
-              style={{ width: 250, height: "calc(100vh)" }}
+              style={{ width: 280, height: "calc(100vh)" }}
               bodyStyle={{ padding: 0, overflowX: "hidden", overflowY: "auto" }}
               headerStyle={{ padding: 5 }}
               placement={placement}
-              width={250}
+              width={280}
               onClose={onClose}
               open={open}
             >
@@ -94,7 +94,7 @@ const GlobalLayout = () => {
           ) : (
             <Sider
               // className="fixed bottom-0 left-0 top-0"
-              width={250}
+              width={280}
               collapsible
               collapsed={collapsed}
               collapsedWidth={0}
@@ -123,7 +123,7 @@ const GlobalLayout = () => {
         <Card
           className={clsx(
             "rounded-none fixed top-0 right-0  shadow-sm z-[999]",
-            !collapsed ? " left-[250px]" : " left-0"
+            !collapsed ? " left-[280px]" : " left-0"
           )}
           bodyStyle={{ padding: "0 12px 0 0", height: 60 }}
         >

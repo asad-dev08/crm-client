@@ -28,6 +28,7 @@ import CustomerTypeList from "../pages/customers/customer-type/customer-type-lis
 import TaxRateList from "../pages/tax-rate/tax-rate-list/TaxRateList";
 import PaymentMediumList from "../pages/payment-medium/payment-medium-list/PaymentMediumList";
 import ExpenseCategoryList from "../pages/expense-category/expense-category-list/ExpenseCategoryList";
+import CampaignFormBuilder from "../pages/campaign/form-builder/CampaignFormBuilder";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -130,6 +131,10 @@ const AppRoutes = () => {
     {
       path: "login",
       element: <Login />,
+    },
+    {
+      path: "/campaign-form-builder",
+      element: <CampaignFormBuilder />,
     },
   ];
 
