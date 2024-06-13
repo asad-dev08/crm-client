@@ -29,6 +29,8 @@ import TaxRateList from "../pages/tax-rate/tax-rate-list/TaxRateList";
 import PaymentMediumList from "../pages/payment-medium/payment-medium-list/PaymentMediumList";
 import ExpenseCategoryList from "../pages/expense-category/expense-category-list/ExpenseCategoryList";
 import CampaignFormBuilder from "../pages/campaign/form-builder/CampaignFormBuilder";
+import CampaignList from "../pages/campaign/campaign-list/CampaignList";
+import CampaignFormList from "../pages/campaign/campaign-form-list/CampaignFormList";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -117,6 +119,14 @@ const AppRoutes = () => {
           path: "/expense-categorys",
           element: <ExpenseCategoryList />,
         },
+        {
+          path: "/campaign/campaign-list",
+          element: <CampaignList />,
+        },
+        {
+          path: "/campaign/campaign-form-list",
+          element: <CampaignFormList />,
+        },
 
         {
           path: "/*",
@@ -131,10 +141,6 @@ const AppRoutes = () => {
     {
       path: "login",
       element: <Login />,
-    },
-    {
-      path: "/campaign-form-builder",
-      element: <CampaignFormBuilder />,
     },
   ];
 
