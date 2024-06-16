@@ -80,3 +80,7 @@
 .ql-container.ql-snow {
   height: 150px;
 }
+
+.campaign-form .ant-form-item-control-input-content {
+  flex: initial;
+}

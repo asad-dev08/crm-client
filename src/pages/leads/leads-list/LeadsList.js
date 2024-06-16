@@ -206,7 +206,7 @@ const LeadsList = () => {
         onCancel={handleDeleteModalCancel}
         maskClosable={false}
       >
-        <p>Are you sure you want to delete this lead status?</p>
+        <p>Are you sure you want to delete this lead?</p>
       </Modal>
     </div>
   );

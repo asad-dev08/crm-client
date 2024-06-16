@@ -50,7 +50,7 @@ const CreateLeads = ({ onClose, open, data, isAdd }) => {
     const model = {
       ...values,
       id: isAdd ? 0 : data.id,
-      contact_date: selectedDate,
+      contact_date: dayjs(values.contact_date).format("YYYY-MM-DD HH:mm:ss A"),
     };
 
     try {
@@ -94,30 +94,6 @@ const CreateLeads = ({ onClose, open, data, isAdd }) => {
       }
     } catch (error) {}
   };
-
-  const buddhistLocale = {
-    ...en,
-    lang: {
-      ...en.lang,
-      fieldDateFormat: "YYYY-MM-DD",
-      fieldDateTimeFormat: "YYYY-MM-DD HH:mm:ss A",
-      yearFormat: "YYYY",
-      cellYearFormat: "YYYY",
-    },
-  };
-  const globalBuddhistLocale = {
-    ...enUS,
-    DatePicker: {
-      ...enUS.DatePicker,
-      lang: buddhistLocale.lang,
-    },
-  };
-  const [selectedDate, setSelectedDate] = useState(
-    data ? dayjs(data.contact_date) : dayjs(new Date())
-  );
-  const onChange = (_, dateStr) => {
-    setSelectedDate(dateStr);
-  };
   return (
     <Drawer
       title="Add/Edit Lead "
@@ -154,9 +130,7 @@ const CreateLeads = ({ onClose, open, data, isAdd }) => {
           website: (data && data.website) || "",
           lead_value: (data && data.lead_value) || 0,
           description: (data && data.description) || "",
-          contact_date:
-            (data && dayjs(data.contact_date)) ||
-            moment(new Date()).format("YYYY-MM-DD HH:mm:ss A"),
+          contact_date: (data && dayjs(data.contact_date)) || dayjs(new Date()),
           is_active: data && data.is_active,
         }}
         scrollToFirstError
@@ -298,14 +272,7 @@ const CreateLeads = ({ onClose, open, data, isAdd }) => {
             label="Contact Date"
             className="w-full"
           >
-            <ConfigProvider locale={globalBuddhistLocale}>
-              <DatePicker
-                className="w-full"
-                defaultValue={selectedDate}
-                showTime
-                onChange={onChange}
-              />
-            </ConfigProvider>
+            <DatePicker className="w-full" showTime />
           </Form.Item>
           <Form.Item
             name="is_active"

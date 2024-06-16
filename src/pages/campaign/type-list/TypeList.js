@@ -4,13 +4,12 @@ import PaginatedDataGrid from "../../../components/theme/global/datagrid/Paginat
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  deleteCampaign,
-  getCampaign,
-  getCampaignsWithPagination,
-} from "../../../redux/campaign/campaignSlice";
+  deleteCampaignType,
+  getCampaignType,
+  getCampaignTypesWithPagination,
+} from "../../../redux/campaign/campaignTypeSlice";
 import { Button, Dropdown, Menu, Modal } from "antd";
 import {
-  MdAdd,
   MdDeleteOutline,
   MdMoreVert,
   MdOutlineModeEdit,
@@ -18,10 +17,10 @@ import {
 } from "react-icons/md";
 import toast from "react-hot-toast";
 import { getPermissionsForMenu } from "../../../util/helper";
-import CampaignListHeader from "./CampaignListHeader";
-import CreateCampaign from "../create-campaign/CreateCampaign";
+import TypeListHeader from "./TypeListHeader";
+import CreateType from "../create-type/CreateType";
 
-const CampaignList = () => {
+const CampaignTypeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,25 +73,16 @@ const CampaignList = () => {
           </div>
         </Menu.Item>
       ) : null}
-      {permission && permission.can_create ? (
-        <Menu.Item key="create-form">
-          <div className="flex items-center gap-2">
-            <MdAdd /> Create Campaign Form
-          </div>
-        </Menu.Item>
-      ) : null}
     </Menu>
   );
   const handleMenuClick = async (e, row) => {
     if (e.key === "edit") {
-      const response = await dispatch(getCampaign(row.id));
+      const response = await dispatch(getCampaignType(row.id));
       const data =
         (await response) && response.payload && response.payload.data;
       setSelectedRow(data);
       showDrawer();
       setIsAdd(false);
-    } else if (e.key === "create-form") {
-      navigate(`/campaign/campaign-form/${row.id}`, { replace: true });
     }
   };
 
@@ -102,9 +92,9 @@ const CampaignList = () => {
   };
   const handleDeleteModalOk = async () => {
     // Perform delete action
-    const response = await dispatch(deleteCampaign(selectedRow.id));
+    const response = await dispatch(deleteCampaignType(selectedRow.id));
     if (response) {
-      toast.success("Campaign deleted", { duration: 3000 });
+      toast.success("Campaign Type deleted", { duration: 3000 });
       setDeleteType(true); // Trigger data refetch
       setDeleteModalVisible(false); // Close the modal
     }
@@ -164,8 +154,8 @@ const CampaignList = () => {
   };
   const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
-      getCampaignsWithPagination({
-        tableName: "campaign",
+      getCampaignTypesWithPagination({
+        tableName: "campaign_type",
         page: page,
         pageSize: pageSize,
       })
@@ -187,7 +177,7 @@ const CampaignList = () => {
   }, [deleteType]);
   return (
     <div>
-      <CampaignListHeader
+      <TypeListHeader
         showDrawer={showDrawer}
         setIsAdd={setAddOrEdit}
         permission={permission}
@@ -199,7 +189,7 @@ const CampaignList = () => {
         dataManipulator={manipulateData}
       />
       {open && (
-        <CreateCampaign
+        <CreateType
           onClose={onClose}
           open={open}
           data={selectedRow}
@@ -219,4 +209,4 @@ const CampaignList = () => {
   );
 };
 
-export default CampaignList;
+export default CampaignTypeList;

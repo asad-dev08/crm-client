@@ -4,13 +4,12 @@ import PaginatedDataGrid from "../../../components/theme/global/datagrid/Paginat
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  deleteCampaign,
-  getCampaign,
-  getCampaignsWithPagination,
-} from "../../../redux/campaign/campaignSlice";
+  deleteCampaignAudience,
+  getCampaignAudience,
+  getCampaignAudiencesWithPagination,
+} from "../../../redux/campaign/campaignAudienceSlice";
 import { Button, Dropdown, Menu, Modal } from "antd";
 import {
-  MdAdd,
   MdDeleteOutline,
   MdMoreVert,
   MdOutlineModeEdit,
@@ -18,14 +17,14 @@ import {
 } from "react-icons/md";
 import toast from "react-hot-toast";
 import { getPermissionsForMenu } from "../../../util/helper";
-import CampaignListHeader from "./CampaignListHeader";
-import CreateCampaign from "../create-campaign/CreateCampaign";
+import AudienceListHeader from "./AudienceListHeader";
+import CreateAudience from "../create-audience/CreateAudience";
 
-const CampaignList = () => {
+const AudienceList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [deleteType, setDeleteType] = useState(false);
+  const [deleteAudience, setDeleteAudience] = useState(false);
   const [open, setOpen] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -74,25 +73,16 @@ const CampaignList = () => {
           </div>
         </Menu.Item>
       ) : null}
-      {permission && permission.can_create ? (
-        <Menu.Item key="create-form">
-          <div className="flex items-center gap-2">
-            <MdAdd /> Create Campaign Form
-          </div>
-        </Menu.Item>
-      ) : null}
     </Menu>
   );
   const handleMenuClick = async (e, row) => {
     if (e.key === "edit") {
-      const response = await dispatch(getCampaign(row.id));
+      const response = await dispatch(getCampaignAudience(row.id));
       const data =
         (await response) && response.payload && response.payload.data;
       setSelectedRow(data);
       showDrawer();
       setIsAdd(false);
-    } else if (e.key === "create-form") {
-      navigate(`/campaign/campaign-form/${row.id}`, { replace: true });
     }
   };
 
@@ -102,10 +92,10 @@ const CampaignList = () => {
   };
   const handleDeleteModalOk = async () => {
     // Perform delete action
-    const response = await dispatch(deleteCampaign(selectedRow.id));
+    const response = await dispatch(deleteCampaignAudience(selectedRow.id));
     if (response) {
-      toast.success("Campaign deleted", { duration: 3000 });
-      setDeleteType(true); // Trigger data refetch
+      toast.success("Campaign Audience deleted", { duration: 3000 });
+      setDeleteAudience(true); // Trigger data refetch
       setDeleteModalVisible(false); // Close the modal
     }
   };
@@ -164,8 +154,8 @@ const CampaignList = () => {
   };
   const fetchData = async (page = 0, pageSize = 0) => {
     const response = await dispatch(
-      getCampaignsWithPagination({
-        tableName: "campaign",
+      getCampaignAudiencesWithPagination({
+        tableName: "campaign_audience",
         page: page,
         pageSize: pageSize,
       })
@@ -180,14 +170,14 @@ const CampaignList = () => {
     };
   };
   useEffect(() => {
-    if (deleteType) {
+    if (deleteAudience) {
       fetchData(1); // Fetch data again after deletion
-      setDeleteType(false); // Reset delete status
+      setDeleteAudience(false); // Reset delete status
     }
-  }, [deleteType]);
+  }, [deleteAudience]);
   return (
     <div>
-      <CampaignListHeader
+      <AudienceListHeader
         showDrawer={showDrawer}
         setIsAdd={setAddOrEdit}
         permission={permission}
@@ -199,7 +189,7 @@ const CampaignList = () => {
         dataManipulator={manipulateData}
       />
       {open && (
-        <CreateCampaign
+        <CreateAudience
           onClose={onClose}
           open={open}
           data={selectedRow}
@@ -213,10 +203,10 @@ const CampaignList = () => {
         onCancel={handleDeleteModalCancel}
         maskClosable={false}
       >
-        <p>Are you sure you want to delete this campaign type?</p>
+        <p>Are you sure you want to delete this campaign audience?</p>
       </Modal>
     </div>
   );
 };
 
-export default CampaignList;
+export default AudienceList;

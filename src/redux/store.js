@@ -23,6 +23,12 @@ import paymentMediumReducer from "./payment-medium/paymentMediumSlice";
 import taxRateReducer from "./tax-rate/taxRateSlice";
 import expenseCategoryReducer from "./expense-category/expenseCategorySlice";
 
+import campaignAudienceReducer from "./campaign/campaignAudienceSlice";
+import campaignFormReducer from "./campaign/campaignFormSlice";
+import campaignReducer from "./campaign/campaignSlice";
+import campaignStatusReducer from "./campaign/campaignStatusSlice";
+import campaignTypeReducer from "./campaign/campaignTypeSlice";
+
 import logger from "redux-logger";
 
 const store = configureStore({
@@ -41,9 +47,6 @@ const store = configureStore({
     leadSource: leadSourceReducer,
     leadStatus: leadStatusReducer,
     lead: leadReducer,
-    leadSource: leadSourceReducer,
-    leadStatus: leadStatusReducer,
-    lead: leadReducer,
 
     customerType: customerTypeReducer,
     currency: currencyReducer,
@@ -52,6 +55,12 @@ const store = configureStore({
     paymentMedium: paymentMediumReducer,
     taxRate: taxRateReducer,
     expenseCategory: expenseCategoryReducer,
+
+    campaignAudience: campaignAudienceReducer,
+    campaignForm: campaignFormReducer,
+    campaign: campaignReducer,
+    campaignStatus: campaignStatusReducer,
+    campaignType: campaignTypeReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

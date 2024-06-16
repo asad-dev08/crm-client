@@ -43,6 +43,12 @@ export const PAYMENT_MEDIUM_CONTROLLER = "payment-medium";
 export const TAX_RATE_CONTROLLER = "tax-rate";
 export const EXPENSE_CATEGORY_CONTROLLER = "expense-category";
 
+export const CAMPAIGN_CONTROLLER = "campaign";
+export const CAMPAIGN_FORM_CONTROLLER = "campaign-form";
+export const CAMPAIGN_AUDIENCE_CONTROLLER = "campaign-audience";
+export const CAMPAIGN_TYPE_CONTROLLER = "campaign-type";
+export const CAMPAIGN_STATUS_CONTROLLER = "campaign-status";
+
 export const USER_CONTROLLER = "user";
 export const COMPANY_CONTROLLER = "company";
 export const EVENT_CALENDAR_CONTROLLER = "event-calendar";

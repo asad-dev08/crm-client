@@ -31,6 +31,9 @@ import ExpenseCategoryList from "../pages/expense-category/expense-category-list
 import CampaignFormBuilder from "../pages/campaign/form-builder/CampaignFormBuilder";
 import CampaignList from "../pages/campaign/campaign-list/CampaignList";
 import CampaignFormList from "../pages/campaign/campaign-form-list/CampaignFormList";
+import CampaignStatusList from "../pages/campaign/status-list/CampaignStatusList";
+import AudienceList from "../pages/campaign/audience-list/AudienceList";
+import CampaignTypeList from "../pages/campaign/type-list/TypeList";
 
 const AppRoutes = () => {
   const { token } = useAuth();
@@ -120,12 +123,28 @@ const AppRoutes = () => {
           element: <ExpenseCategoryList />,
         },
         {
+          path: "/campaign/campaign-status-list",
+          element: <CampaignStatusList />,
+        },
+        {
+          path: "/campaign/campaign-audience-list",
+          element: <AudienceList />,
+        },
+        {
+          path: "/campaign/campaign-type-list",
+          element: <CampaignTypeList />,
+        },
+        {
           path: "/campaign/campaign-list",
           element: <CampaignList />,
         },
         {
           path: "/campaign/campaign-form-list",
           element: <CampaignFormList />,
+        },
+        {
+          path: "/campaign/campaign-form/:id",
+          element: <CampaignFormBuilder />,
         },
 
         {

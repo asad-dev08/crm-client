@@ -20,7 +20,7 @@ const propertyList = {
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
-  heading: {
+  label: {
     width: "100%",
     display: "block",
     color: "black",
@@ -30,6 +30,7 @@ const propertyList = {
     fontWeight: "400",
     padding: "5px",
     margin: "5px",
+    textAlign: "center",
   },
   button: {
     width: "100%",
@@ -41,6 +42,7 @@ const propertyList = {
     fontWeight: "400",
     padding: "10px 20px",
     margin: "10px",
+    textAlign: "center",
   },
   textbox: {
     width: "100%",
@@ -50,6 +52,7 @@ const propertyList = {
     fontSize: "16px",
     padding: "10px",
     margin: "10px",
+    textAlign: "center",
   },
   checkbox: {
     width: "100%",
@@ -58,6 +61,7 @@ const propertyList = {
     border: "1px solid lightgray",
     padding: "10px",
     margin: "10px",
+    textAlign: "center",
   },
   radio: {
     width: "100%",
@@ -66,6 +70,7 @@ const propertyList = {
     border: "1px solid lightgray",
     padding: "10px",
     margin: "10px",
+    textAlign: "center",
   },
   dropdown: {
     width: "100%",
@@ -74,6 +79,7 @@ const propertyList = {
     border: "1px solid lightgray",
     padding: "10px",
     margin: "10px",
+    textAlign: "center",
   },
   list: {
     width: "100%",
@@ -82,6 +88,7 @@ const propertyList = {
     border: "1px solid lightgray",
     padding: "10px",
     margin: "10px",
+    textAlign: "center",
   },
   table: {
     width: "100%",
@@ -90,6 +97,7 @@ const propertyList = {
     border: "1px solid lightgray",
     padding: "10px",
     margin: "10px",
+    textAlign: "center",
   },
   image: {
     width: "100%",
