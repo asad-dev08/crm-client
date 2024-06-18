@@ -127,7 +127,7 @@ const FormElementDragged = (props) => {
               <Typography>{element.textboxLabel}</Typography>
             )}
             <Form.Item
-              className=""
+              className="w-full"
               name={element.elementName}
               rules={[
                 {
@@ -142,7 +142,7 @@ const FormElementDragged = (props) => {
                 id={element.id}
                 placeholder={element.textboxPlaceholder}
                 // addonBefore={element.content}
-                className="my-2"
+                className="my-2 w-full"
                 style={{ ...element.customStyle }}
               />
             </Form.Item>

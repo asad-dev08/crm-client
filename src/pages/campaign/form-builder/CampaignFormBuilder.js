@@ -13,11 +13,15 @@ import {
   Table,
   AppBar,
   Toolbar,
+  Card,
 } from "antd";
 import { useNavigate } from "react-router";
 import { CloseOutlined } from "@ant-design/icons";
 import Preview from "./Preview";
 import { useParams } from "react-router-dom";
+import { saveCampaignForm } from "../../../redux/campaign/campaignFormSlice";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 const { Option } = Select;
 const { Title } = Typography;
 
@@ -56,7 +60,7 @@ const gridStyle = (length, isrow) => {
 function CampaignFormBuilder() {
   const params = useParams();
   const { id } = params;
-  console.log(id);
+  const dispatch = useDispatch();
 
   const [items, setItems] = useState(sourceElements);
   const [draggedItem, setDraggedItem] = useState(defaultForm);
@@ -968,18 +972,59 @@ function CampaignFormBuilder() {
     readFile(0);
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
+    const obj = {
+      name: formName,
+      campaign_id: id,
+      formJSON: JSON.stringify(draggedItem),
+      is_active: true,
+    };
+    try {
+      await dispatch(saveCampaignForm(obj))
+        .then((response) => {
+          if (
+            response &&
+            response.payload &&
+            response.payload.statusCode === 201
+          ) {
+            toast.success(
+              response && response.payload && response.payload.message,
+              { duration: 3000 }
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error submitting form:", error);
+          toast.error(error, { duration: 3000 });
+        });
+    } catch (error) {
+      console.log("error: ", e);
+    }
   };
 
+  const [formName, setFormName] = useState("");
   return (
     <>
       <div className="p-4 flex items-start justify-between gap-4">
         <div className="w-full mr-[300px]">
           <div className="flex items-center justify-between flex-col lg:flex-row">
-            <div className="flex items-center gap-4">
+            <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4">
               <Button onClick={handleClickOpen}>Preview</Button>
-              <Button onClick={(e) => handleSave(e)}>Save</Button>
+              <div className="flex items-center gap-2">
+                <Input
+                  placeholder="Enter Form Name"
+                  required
+                  onChange={(e) => setFormName(e.target.value)}
+                />
+                <Button
+                  type="primary"
+                  onClick={(e) => handleSave(e)}
+                  disabled={formName === ""}
+                >
+                  Save
+                </Button>
+              </div>
               {/* <Button type="primary" onClick={(e) => handleDownlaod(e)}>
                   Download Code
                 </Button> */}
@@ -1002,7 +1047,7 @@ function CampaignFormBuilder() {
             ))}
           </div>
         </div>
-        <div className="fixed right-0 top-[60px] bottom-0 max-w-[300px] w-[300px] bg-white p-4 overflow-y-auto shadow-lg">
+        <Card className="fixed right-0 top-[60px] bottom-0 max-w-[300px] w-[300px] p-4 overflow-y-auto shadow-lg">
           <Title level={4}>Element List</Title>
           <div className="grid grid-cols-2 gap-4">
             {sourceElements.map((element) => (
@@ -1015,7 +1060,7 @@ function CampaignFormBuilder() {
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
       <Modal
         width="100%"

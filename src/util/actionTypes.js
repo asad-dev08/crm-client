@@ -45,6 +45,7 @@ export const EXPENSE_CATEGORY_CONTROLLER = "expense-category";
 
 export const CAMPAIGN_CONTROLLER = "campaign";
 export const CAMPAIGN_FORM_CONTROLLER = "campaign-form";
+export const CAMPAIGN_FORM_SUBMISSION_API = "save-form";
 export const CAMPAIGN_AUDIENCE_CONTROLLER = "campaign-audience";
 export const CAMPAIGN_TYPE_CONTROLLER = "campaign-type";
 export const CAMPAIGN_STATUS_CONTROLLER = "campaign-status";

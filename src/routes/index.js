@@ -34,13 +34,19 @@ import CampaignFormList from "../pages/campaign/campaign-form-list/CampaignFormL
 import CampaignStatusList from "../pages/campaign/status-list/CampaignStatusList";
 import AudienceList from "../pages/campaign/audience-list/AudienceList";
 import CampaignTypeList from "../pages/campaign/type-list/TypeList";
+import CampaignPublicForm from "../pages/campaign/campaign-public-form/CampaignPublicForm";
 
 const AppRoutes = () => {
   const { token } = useAuth();
   const [router, setRouter] = useState(null);
 
   // Define public routes accessible to all users
-  const routesForPublic = [];
+  const routesForPublic = [
+    {
+      path: "/campaign/user-form-submission/:id",
+      element: <CampaignPublicForm />,
+    },
+  ];
 
   // Define routes accessible only to authenticated users
   const routesForAuthenticatedOnly = [

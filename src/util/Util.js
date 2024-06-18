@@ -2,6 +2,8 @@ import { Base64 } from "js-base64";
 import CryptoJS from "crypto-js";
 import { secureLocalStorage } from "./EncryptDecryptJWTToken";
 
+import jwtService from "../jwtService";
+
 export class Util {
   static instance;
   // Common Base64 encoding/decoding tool
@@ -32,6 +34,31 @@ export class Util {
   invalidUser = () => {
     const hasUser = this.getUserData();
     if (hasUser === null || hasUser === "") return true;
+    return false;
+  };
+
+  hasException = function (res) {
+    if (res.response && res.response.data && res.response.data.httpStatus) {
+      switch (res.response.data.httpStatus) {
+        case "UNAUTHORIZED":
+          jwtService.logout();
+          window.location.href = "/";
+          return true;
+        case "APP_ERROR":
+        case "BAD_REQUEST":
+        case "NOT_FOUND":
+        case "NO_CONTENT":
+        case "INTERNAL_ERROR":
+        case "CONNECT_ERROR":
+        case "FAILURE":
+        case "SERVICE_UNAVAILABLE":
+        case "CONNECT_TIMEOUT":
+        case "VALIDATION":
+          return true;
+        default:
+          return false;
+      }
+    }
     return false;
   };
 }

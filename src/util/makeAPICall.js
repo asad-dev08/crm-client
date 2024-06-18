@@ -83,7 +83,6 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
     // Make the API call using Axios
     //axios.defaults.withCredentials = true;
     const response = await axios(config);
-
     if (response && response.status === 401) {
       toast.error(response && response.statusText, { duration: 3000 });
       return;
@@ -99,8 +98,11 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
       toast.error(error && error.response && error.response.data.message);
       return { data: error.response, hasError: true };
     } else {
-      console.error("Error:", error.message);
-      toast.error(error.message, { duration: 3000 });
+      if (util.hasException(error)) {
+        console.error("Error:", error.response.data.message);
+        toast.error(error.response.data.message, { duration: 3000 });
+        return Promise.reject(error.data);
+      }
     }
     //throw error;
   } finally {

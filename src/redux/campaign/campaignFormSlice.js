@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { makeApiCall } from "../../util/makeAPICall";
 import {
   CAMPAIGN_FORM_CONTROLLER,
+  CAMPAIGN_FORM_SUBMISSION_API,
   PAGINATION_API,
 } from "../../util/actionTypes";
 
@@ -38,6 +39,30 @@ export const saveCampaignForm = createAsyncThunk(
       const response = await makeApiCall(
         "post",
         `/${CAMPAIGN_FORM_CONTROLLER}`,
+        obj,
+        {}
+      );
+
+      if (!response) {
+        // Handle non-successful responses
+        throw new Error("Date Fetching failed");
+      }
+
+      const data = await response;
+
+      return data.data || null;
+    } catch (error) {
+      return rejectWithValue(error.message); // Pass the error message to the rejectWithValue payload
+    }
+  }
+);
+export const saveCampaignFormSubmissionData = createAsyncThunk(
+  "campaignForm/saveCampaignForm",
+  async (obj, { rejectWithValue }) => {
+    try {
+      const response = await makeApiCall(
+        "post",
+        `/${CAMPAIGN_FORM_CONTROLLER}/${CAMPAIGN_FORM_SUBMISSION_API}`,
         obj,
         {}
       );
@@ -156,6 +181,7 @@ const campaignFormSlice = createSlice({
   initialState: {
     campaignForms: [],
     campaignFormsComboList: [],
+    campaignForm: null,
     loading: false,
     error: null,
   },
@@ -219,6 +245,20 @@ const campaignFormSlice = createSlice({
         state.error = null;
       })
       .addCase(getCampaignForms.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getCampaignForm.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCampaignForm.fulfilled, (state, action) => {
+        const data = action.payload.data;
+        state.campaignForm = data;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(getCampaignForm.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
