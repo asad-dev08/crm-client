@@ -227,7 +227,7 @@ const CampaignFormList = () => {
         onCancel={handleDeleteModalCancel}
         maskClosable={false}
       >
-        <p>Are you sure you want to delete this campaign type?</p>
+        <p>Are you sure you want to delete this campaign form?</p>
       </Modal>
       <Modal
         title="Public URL"

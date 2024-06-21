@@ -52,7 +52,6 @@ const CampaignPublicForm = () => {
     form.submit();
   };
   const onFinish = async (values) => {
-    console.log("form values:", values);
     const obj = {
       campaign_id: id,
       formJSON: { ...values },

@@ -10,6 +10,8 @@ const util = new Util();
 
 export const makeApiCall = async (method, url, data = null, headers = {}) => {
   const pathsToSkipTokenCheck = ["/auth/verifyLogin"];
+  const publicUrls = [/^\/campaign-form\/?.*/];
+
   try {
     const store = require("../redux/store").default;
     store.dispatch(startLoading()); // Dispatch startLoading action
@@ -18,37 +20,39 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
     const isInvalid = util.invalidUser();
     const isAuthValid = jwtService.isAuthTokenValid(accessToken);
 
-    // Check if accessToken is null or undefined and if the current path is not in pathsToSkipTokenCheck
-    if (!accessToken && !pathsToSkipTokenCheck.includes(url)) {
-      // Show error message
-      toast.error("Access token Invalid. Please log in.", { duration: 4000 });
+    if (!publicUrls.some((pattern) => pattern.test(url))) {
+      // Check if accessToken is null or undefined and if the current path is not in pathsToSkipTokenCheck
+      if (!accessToken && !pathsToSkipTokenCheck.includes(url)) {
+        // Show error message
+        toast.error("Access token Invalid. Please log in.", { duration: 4000 });
 
-      jwtService.setSession(null);
-      jwtService.removeUserData();
+        jwtService.setSession(null);
+        jwtService.removeUserData();
 
-      //store.dispatch(stopLoading());
-      window.location.href = "/";
-      return; // Stop further execution
-    }
-    if (isInvalid && !pathsToSkipTokenCheck.includes(url)) {
-      toast.error("Access token Invalid. Please log in.", { duration: 4000 });
+        //store.dispatch(stopLoading());
+        window.location.href = "/";
+        return; // Stop further execution
+      }
+      if (isInvalid && !pathsToSkipTokenCheck.includes(url)) {
+        toast.error("Access token Invalid. Please log in.", { duration: 4000 });
 
-      jwtService.setSession(null);
-      jwtService.removeUserData();
+        jwtService.setSession(null);
+        jwtService.removeUserData();
 
-      //store.dispatch(stopLoading());
-      window.location.href = "/";
-      return; // Stop further execution
-    }
-    if (!isAuthValid && !pathsToSkipTokenCheck.includes(url)) {
-      toast.error("Access token Invalid. Please log in.", { duration: 4000 });
+        //store.dispatch(stopLoading());
+        window.location.href = "/";
+        return; // Stop further execution
+      }
+      if (!isAuthValid && !pathsToSkipTokenCheck.includes(url)) {
+        toast.error("Access token Invalid. Please log in.", { duration: 4000 });
 
-      jwtService.setSession(null);
-      jwtService.removeUserData();
+        jwtService.setSession(null);
+        jwtService.removeUserData();
 
-      //store.dispatch(stopLoading());
-      window.location.href = "/";
-      return; // Stop further execution
+        //store.dispatch(stopLoading());
+        window.location.href = "/";
+        return; // Stop further execution
+      }
     }
 
     // Add your API base URL or any other default configurations here
@@ -64,7 +68,10 @@ export const makeApiCall = async (method, url, data = null, headers = {}) => {
     // Set up Axios request configuration
     let config = null;
 
-    if (pathsToSkipTokenCheck.includes(url)) {
+    if (
+      pathsToSkipTokenCheck.includes(url) ||
+      publicUrls.some((pattern) => pattern.test(url))
+    ) {
       config = {
         method: method.toUpperCase(),
         url: `${baseUrl}${url}`,
