@@ -188,7 +188,9 @@ const CreateBoard = ({
               <span className="mt-[2px]">Add Column</span>
             </Button>
           </Form.Item>
-          {permission && permission.can_create ? (
+          {permission &&
+          (permission.can_create || permission.can_update) &&
+          !isView ? (
             <Form.Item>
               <Button
                 type="primary"

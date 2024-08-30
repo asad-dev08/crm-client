@@ -123,14 +123,13 @@ const UserList = () => {
   ];
   const cellFormatting = {
     name: {
-      textAlign: "left",
+      style: { textAlign: "left" },
     },
     email: {
-      textAlign: "left",
+      style: { textAlign: "left" },
     },
     actions: {
-      width: "100px",
-      textAlign: "center",
+      style: { width: "100px", textAlign: "left" },
     },
   };
   const manipulateData = (data) => {

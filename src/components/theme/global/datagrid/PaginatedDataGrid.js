@@ -51,9 +51,32 @@ const PaginatedDataGrid = ({
           title: column.columnShow.toUpperCase(),
           dataIndex: column.columnName,
           key: column.columnName,
-          render: (text, record) =>
-            column.render ? column.render(record) : text,
-          ...cellFormatting[column.columnName], // Apply cell formatting styles
+          render: (text, record) => {
+            const style = cellFormatting[column.columnName]?.style || {};
+            const className =
+              cellFormatting[column.columnName]?.className || "";
+
+            // const customRender = column.render ? column.render(record) : text;
+            let customRender = text;
+            if (column.render) {
+              customRender = column.render(record);
+            }
+            if (!column.render && cellFormatting[column.columnName]?.render) {
+              customRender = cellFormatting[column.columnName].render(
+                text,
+                record
+              );
+            }
+
+            return (
+              <div className={className} style={style}>
+                {customRender}
+              </div>
+            );
+          },
+          // render: (text, record) =>
+          //   column.render ? column.render(record) : text,
+          // ...cellFormatting[column.columnName], // Apply cell formatting styles
         }))}
         pagination={false}
       />
